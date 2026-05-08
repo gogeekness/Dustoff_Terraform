@@ -16821,3 +16821,24 @@ The offending line appears to be:
 2025-05-23 12:24:36,953 p=98076 u=reseke n=ansible | ec2-54-93-184-79.eu-central-1.compute.amazonaws.com : ok=16   changed=6    unreachable=0    failed=0    skipped=3    rescued=0    ignored=0   
 2025-05-23 12:24:36,954 p=98076 u=reseke n=ansible | ip-10-0-1-10.eu-central-1.compute.internal : ok=11   changed=3    unreachable=0    failed=1    skipped=5    rescued=0    ignored=0   
 2025-05-23 12:24:36,954 p=98076 u=reseke n=ansible | ip-10-0-1-11.eu-central-1.compute.internal : ok=11   changed=3    unreachable=0    failed=1    skipped=5    rescued=0    ignored=0   
+2026-04-24 17:00:17,153 p=210826 u=reseke n=ansible |  [ERROR]: User interrupted execution
+
+2026-04-24 17:04:37,672 p=214710 u=reseke n=ansible | ERROR! Decryption failed (no vault secrets were found that could decrypt) on Terraform_Vault for Terraform_Vault
+2026-04-24 17:06:10,411 p=216058 u=reseke n=ansible | Using /home/reseke/Documents/Git/Terraform_Lustre/ansible.cfg as config file
+2026-04-24 17:06:15,720 p=216058 u=reseke n=ansible | ERROR! Decryption failed (no vault secrets were found that could decrypt) on Terraform_Vault for Terraform_Vault
+2026-04-24 17:30:17,259 p=237447 u=reseke n=ansible | Using /home/reseke/Documents/Git/Terraform_Lustre/ansible.cfg as config file
+2026-04-24 17:30:25,017 p=237447 u=reseke n=ansible | ERROR! Decryption failed (no vault secrets were found that could decrypt) on Terraform_Vault for Terraform_Vault
+2026-04-24 17:30:51,138 p=237884 u=reseke n=ansible | Using /home/reseke/Documents/Git/Terraform_Lustre/ansible.cfg as config file
+2026-04-24 17:30:53,701 p=237884 u=reseke n=ansible | ERROR! Decryption failed (no vault secrets were found that could decrypt) on Terraform_Vault for Terraform_Vault
+2026-04-24 17:31:35,559 p=238456 u=reseke n=ansible | Using /home/reseke/Documents/Git/Terraform_Lustre/ansible.cfg as config file
+2026-04-24 17:31:38,257 p=238456 u=reseke n=ansible | ERROR! Decryption failed (no vault secrets were found that could decrypt) on Terraform_Vault for Terraform_Vault
+2026-04-24 17:32:16,098 p=238994 u=reseke n=ansible | Using /home/reseke/Documents/Git/Terraform_Lustre/ansible.cfg as config file
+2026-04-24 17:32:19,141 p=238994 u=reseke n=ansible | ERROR! Decryption failed (no vault secrets were found that could decrypt) on Terraform_Vault for Terraform_Vault
+2026-04-24 17:32:21,463 p=239048 u=reseke n=ansible | Using /home/reseke/Documents/Git/Terraform_Lustre/ansible.cfg as config file
+2026-04-24 17:32:31,318 p=239048 u=reseke n=ansible | ERROR! Decryption failed (no vault secrets were found that could decrypt) on Terraform_Vault for Terraform_Vault
+2026-04-24 17:32:33,128 p=239202 u=reseke n=ansible | Using /home/reseke/Documents/Git/Terraform_Lustre/ansible.cfg as config file
+2026-04-24 17:33:08,833 p=239202 u=reseke n=ansible | ERROR! Decryption failed (no vault secrets were found that could decrypt) on Terraform_Vault for Terraform_Vault
+2026-04-24 17:33:42,160 p=240109 u=reseke n=ansible | Using /home/reseke/Documents/Git/Terraform_Lustre/ansible.cfg as config file
+2026-04-24 17:33:45,763 p=240109 u=reseke n=ansible | ERROR! Decryption failed (no vault secrets were found that could decrypt) on Terraform_Vault for Terraform_Vault
+2026-04-24 17:34:14,698 p=240525 u=reseke n=ansible | Using /home/reseke/Documents/Git/Terraform_Lustre/ansible.cfg as config file
+2026-04-24 17:34:17,903 p=240525 u=reseke n=ansible | ERROR! Decryption failed (no vault secrets were found that could decrypt) on Terraform_Vault for Terraform_Vault
