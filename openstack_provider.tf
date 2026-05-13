@@ -12,21 +12,23 @@
 
 terraform {
   required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      #version = "~> 4.16"
+    openstack = {
+      source  = "terraform-provider-openstack/openstack"
+      version = "~> 2.1.0"
     }
   
     ansible = {
       source  = "ansible/ansible"
-      version = "1.3.0"
+      version = "~> 1.3.0"
     }
   }
   required_version = ">= 1.2.0"
 }
 
-provider "aws" {
-  region     = var.region
-  access_key = var.Access_Key_ID
-  secret_key = var.Sercret_Access_Key
+provider "openstack" {
+  user_name   = "admin"
+  tenant_name = "admin"
+  password    = file("~/.ssh/terraf_passcode")
+  auth_url    = "http://192.168.1.100:5000/v3"
+  region      = "RegionOne"
 }
