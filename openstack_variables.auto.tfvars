@@ -2,13 +2,22 @@
 # AMI, IPs, Groupings, are stored here
 #
 
-# ami_image = "ami-0eef48bf23b6479b3"
-# ami_my_image = "ami-0c9a7681c8631e73e"
-# ami_my_image = "ami-08bacc8479e361271"
-# ami_my_image = "ami-0eaa81bbe9d820d4a"
-# lustre_snapshot   = "snap-05443946df91a3b0f"
-// openstack_ubuntu_image  = "stuff"
+external_network_name = "public"
+network_name          = "lustre-test-net"
+subnet_cidr           = "10.0.20.0/24"
+
+
+router_name           = "lustre-test-router"
+instance_name         = "lustre-test-vm"
+flavor_name           = "m1.small"
+keypair_name          = "reseke-key"
+
+
 instance_type     = "m1.small"
+my_image          = "Ubuntu-24-04"
+
+
+
 // region            = "eu-central-1"
 // availability_zone = "eu-central-1a"
 
