@@ -6,7 +6,6 @@ variable "external_network_name" {
   type        = string
   default = "public"
 }
-
 variable "network_name" {
   description = "Name for the new tenant network"
   type        = string
@@ -48,17 +47,17 @@ variable "ssh_key_location" {
   sensitive = true
 }
 
-variable "network_name" {
-  type    = string
-  default = "tf-test-net"
-}
+# variable "network_name" {
+#   type    = string
+#   default = "tf-test-net"
+# }
 
 variable "subnet_cidr" {
   type    = string
   default = "10.0.20.0/24"
 }
 
-variable "router_name" {
-  type    = string
-  default = "tf-test-router"
-}
+# variable "router_name" {
+#   type    = string
+#   default = "tf-test-router"
+# }

@@ -2,12 +2,12 @@
 ## This contains the instance notaction
 ## 
 
-# module "lust_net" {
-#   source = "./Lustre_Net"
-#   region             = var.region
-#   availability_zone  = var.availability_zone
-#   ssh_key_location   = var.openstack_key_pub
-# }
+module "lust_net" {
+  source = "./Lustre_Net"
+  # region             = var.region
+  # availability_zone  = var.availability_zone
+  ssh_key_location   = var.openstack_key_pub
+}
 
 # for each node of this small cluster
 # Terraform will assign the public IP dynamically
@@ -62,35 +62,6 @@ locals {
   inventory = ""
 }
 
-## Adding for access to the internet, I don't need it for testing.
-## I add it here for future upgrades if needed. 
-# ##
-# resource "openstack_internet_gateway" "cluster_igw" {
-#   vpc_id = openstack_vpc.cluster_vpc.id
-#   tags = {
-#     Name = "cluster-igw"
-#   }
-# }
-
-### Maybe in a future expancion.  I need to keep it simple.
-# EBS volumes for data drives all VM will have a extra 30 GB drive
-# resource "openstack_ebs_volume" "data_drives" {
-#   for_each = toset(local.server_names)
-#   availability_zone = module.lust_net.availability_zone
-#   size             = 30  #GB
-#   type             = "gp3"
-#   tags = {
-#     Name = "data-drive-${each.key}"
-#   }
-# }
-# # Need to attach the buffer data drives 
-# resource "openstack_volume_attachment" "data_drive_attachments" {
-#   for_each = { for server in var.server_list : server.host_name => server }
-
-#   device_name = "/dev/sdd"  # Set as second drive 
-#   volume_id   = openstack_ebs_volume.data_drives[each.key].id
-#   instance_id = openstack_instance.Lustre_servers[each.key].id
-### }
 
 # EBS volumes main Data drive 500 GB drive for the oss
 # This is only a test drive.
@@ -102,6 +73,8 @@ resource "openstack_ebs_volume" "zfs_data_drive" {
     Name = "data-drive-oss-server"
   }
 }
+
+
 # Attach large drive specifically to OSS server
 resource "openstack_volume_attachment" "oss_large_drive" {
   device_name = "/dev/sdz"  # Set as -last- drive for the oss
