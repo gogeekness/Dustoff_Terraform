@@ -31,3 +31,8 @@ output "external_network_name" {
   description = "Name of the external network (for floating IP pool)"
   value       = openstack_networking_network_v2.external.name
 }
+
+output "lust_net_cidr" {
+  description = "CIDR of the created subnet"
+  value       = var.subnet_cidr
+}

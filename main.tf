@@ -23,8 +23,9 @@ variable "server_list" {
     {
       host_name     = "lustre_mgt"
       instance_type = "m1.small"
-      ipv4          = "10.0.10.10"
+      ipv4          = "10.0.20.10"
       public_ip     = ""
+      image_name    = "Ubuntu-24-04"
       tags = {
         Name    = "lustre_mgt"
         Role    = "manager"
@@ -34,7 +35,7 @@ variable "server_list" {
     # {
     #   host_name     = "lustre_oss"
     #   instance_type = "t3.xlarge"
-    #   ipv4          = "10.0.10.11"
+    #   ipv4          = "10.0.20.11"
     #   public_ip     = ""
     #   tags = {
     #     Name    = "lustre_oss"
@@ -45,7 +46,7 @@ variable "server_list" {
     # {
     #   host_name     = "lustre_client"
     #   instance_type = "t3a.large"
-    #   ipv4          = "10.0.10.12"
+    #   ipv4          = "10.0.20.12"
     #   public_ip     = "fill"
     #   tags = {
     #     Name    = "bastion"
@@ -62,6 +63,9 @@ locals {
   inventory = ""
 }
 
+data "openstack_images_image_v2" "ubuntu_2404" {
+  id = "2cf93f7d-8a8f-4153-b7c7-aaaa54ae1e98"
+}
 
 # EBS volumes main Data drive 500 GB drive for the oss
 # This is only a test drive.
@@ -82,7 +86,6 @@ resource "openstack_volume_attachment" "oss_large_drive" {
   instance_id = openstack_instance.Lustre_servers["lustre_oss"].id
 }
 
-
 resource "openstack_key_pair" "Lustre_Key" {
   # the name for the resource adding the RSA key to servers
   key_name  = "Lustre_Key"
@@ -90,13 +93,13 @@ resource "openstack_key_pair" "Lustre_Key" {
   # public_key = file("./ssh/lustretest.pub")  #defined in screts
 }
 
-resource "openstack_instance" "Lustre_servers" {
+resource "openstack_compute_instance_v2" "Lustre_servers" {
   for_each        = { for server in var.server_list : server.host_name => server }
   #for_each        = toset(var.server_list)
-
+  name            = each.value.host_name
   # host_id         = "${each.key}"
-  instance_type   = each.value.instance_type
-  ami             = var.ami_my_image
+  flavor_id       = each.value.flavor_name
+  image_id        = each.value.image_name
   subnet_id       = module.lust_net.subnet_id
   private_ip      = each.value.ipv4
   key_name        = openstack_key_pair.Lustre_Key.key_name
@@ -140,10 +143,28 @@ resource "openstack_instance" "Lustre_servers" {
 }
 
 ### output public IP address
-output "ec2_global_ips" {
+
+resource "openstack_networking_network_v2" "network_1" {
+  name           = "network_1"
+  admin_state_up = "true"
+}
+
+resource "openstack_compute_instance_v2" "instance_1" {
+  name            = "instance_1"
+  security_groups = ["default"]
+}
+
+resource "openstack_compute_interface_attach_v2" "ai_1" {
+  instance_id = openstack_compute_instance_v2.instance_1.id
+  network_id  = openstack_networking_network_v2.network_1.id
+}
+
+
+
+output "OpenStack_global_ips" {
   value = [for instance in openstack_instance.Lustre_servers : instance.public_ip]
 }
-output "ec2_private_ips" {
+output "OpenStack_private_ips" {
   value = [for instance in openstack_instance.Lustre_servers : instance.private_ip]
 }
 

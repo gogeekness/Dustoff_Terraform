@@ -46,18 +46,3 @@ variable "ssh_key_location" {
   default = "/home/reseke/.ssh/id.rsa"
   sensitive = true
 }
-
-# variable "network_name" {
-#   type    = string
-#   default = "tf-test-net"
-# }
-
-variable "subnet_cidr" {
-  type    = string
-  default = "10.0.20.0/24"
-}
-
-# variable "router_name" {
-#   type    = string
-#   default = "tf-test-router"
-# }
