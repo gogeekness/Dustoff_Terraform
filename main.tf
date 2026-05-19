@@ -63,10 +63,6 @@ locals {
   inventory = ""
 }
 
-data "openstack_images_image_v2" "ubuntu_2404" {
-  id = "2cf93f7d-8a8f-4153-b7c7-aaaa54ae1e98"
-}
-
 # EBS volumes main Data drive 500 GB drive for the oss
 # This is only a test drive.
 resource "openstack_ebs_volume" "zfs_data_drive" {
@@ -93,7 +89,7 @@ resource "openstack_key_pair" "Lustre_Key" {
   # public_key = file("./ssh/lustretest.pub")  #defined in screts
 }
 
-resource "openstack_compute_instance_v2" "Lustre_servers" {
+resource "openstack_compute_instance" "Lustre_servers" {
   for_each        = { for server in var.server_list : server.host_name => server }
   #for_each        = toset(var.server_list)
   name            = each.value.host_name
@@ -103,60 +99,47 @@ resource "openstack_compute_instance_v2" "Lustre_servers" {
   subnet_id       = module.lust_net.subnet_id
   private_ip      = each.value.ipv4
   key_name        = openstack_key_pair.Lustre_Key.key_name
-  availability_zone = module.lust_net.availability_zone
   associate_public_ip_address = each.key == "lustre_client" ? true : false
 
     # the one we created as "RESOURCE 1) Also we now use the "openstack_security_group" of RESOURCE 2) above
   vpc_security_group_ids = [module.lust_net.security_group.id]
 
+  block_device {
+    uuid                  = data.openstack_images_image.ubuntu_2404.id
+    source_type           = "image"
+    destination_type      = "volume"
+    boot_index            = 0
+    delete_on_termination = true
+    volume_size           = 20 
+  }
+
   tags = merge(
     {
       Name = each.value.host_name
     },
-    each.value.tags
+    each.value.tagshh
   )
-    ### Ansible needs a more modern version of Python then the on installed on the IAM
-    #   Install python by yum command and link it as python3.  
-    user_data = <<EOF
-              #cloud-config
-              
-              packages:
-                - python3.11
-                - lnav
-              
-              late-commands:
-                - [ sh, -c, "ln -sf /bin/python3.11 /bin/python3" ]
 
-              EOF
-
-              # echo "set to early fail"
-              # set -e
-
-              # echo "installing pythhon 38"
-              # # Install Python 3.8
-              # sudo yum install -y python38
-
-              # echo "Set softlink to python3"
-              # # Ensure it's available for Ansible
-              # sudo ln -sf /usr/bin/python3.8 /usr/bin/python3
-              # EOF
+  network {
+    uuid = module.lust_net.network_id   # <-- from module output
+  }
 }
 
 ### output public IP address
 
-resource "openstack_networking_network_v2" "network_1" {
+resource "openstack_networking_network" "network_1" {
   name           = "network_1"
   admin_state_up = "true"
 }
 
-resource "openstack_compute_instance_v2" "instance_1" {
+resource "openstack_compute_instance" "instance_1" {
   name            = "instance_1"
   security_groups = ["default"]
 }
 
-resource "openstack_compute_interface_attach_v2" "ai_1" {
-  instance_id = openstack_compute_instance_v2.instance_1.id
-  network_id  = openstack_networking_network_v2.network_1.id
+resource "openstack_compute_interface_attach" "ai_1" {
+  instance_id = openstack_compute_instance.instance_1.id
+  network_id  = openstack_networking_network.network_1.id
 }
 
 

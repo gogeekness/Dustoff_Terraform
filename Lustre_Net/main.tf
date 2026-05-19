@@ -2,21 +2,21 @@
 
 
 # Look up the existing external (provider) network
-data "openstack_networking_network_v2" "external" {
+data "openstack_networking_network" "external" {
   name     = var.external_network_name
   external = true
 }
 
 # New tenant network
-resource "openstack_networking_network_v2" "test_net" {
+resource "openstack_networking_network" "test_net" {
   name           = var.network_name
   admin_state_up = true
 }
 
 # Subnet 10.0.20.0/24
-resource "openstack_networking_subnet_v2" "test_subnet" {
+resource "openstack_networking_subnet" "test_subnet" {
   name            = "${var.network_name}-subnet"
-  network_id      = openstack_networking_network_v2.test_net.id
+  network_id      = openstack_networking_network.test_net.id
   cidr            = var.subnet_cidr
   ip_version      = 4
   dns_nameservers = var.dns_nameservers 
@@ -27,16 +27,16 @@ resource "openstack_networking_subnet_v2" "test_subnet" {
 }
 
 # Router with uplink to external network
-resource "openstack_networking_router_v2" "test_router" {
+resource "openstack_networking_router" "test_router" {
   name                = var.router_name
   admin_state_up      = true
-  external_network_id = data.openstack_networking_network_v2.external.id
+  external_network_id = data.openstack_networking_network.external.id
 }
 
 # Attach the subnet to the router
-resource "openstack_networking_router_interface_v2" "test_router_iface" {
-  router_id = openstack_networking_router_v2.test_router.id
-  subnet_id = openstack_networking_subnet_v2.test_subnet.id
+resource "openstack_networking_router_interface" "test_router_iface" {
+  router_id = openstack_networking_router.test_router.id
+  subnet_id = openstack_networking_subnet.test_subnet.id
 }
 
 # resource "aws_vpc" "lustre_vpc" {
@@ -101,6 +101,6 @@ resource "openstack_networking_router_interface_v2" "test_router_iface" {
 # }
 
 # # ── Floating IP ─── Capture ─────────────────────────────────────────────────────
-# resource "openstack_networking_floatingip_v2" "fip" {
+# resource "openstack_networking_floatingip" "fip" {
 #   pool = var.external_network_name
 # }

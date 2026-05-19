@@ -2,10 +2,6 @@
 # AMI, IPs, Groupings, are stored here
 #
 
-external_network_name = "public"
-network_name          = "lustre-test-net"
-subnet_cidr           = "10.0.20.0/24"
-
 
 router_name           = "lustre-test-router"
 instance_name         = "lustre-test-vm"
@@ -14,7 +10,7 @@ keypair_name          = "reseke-key"
 
 
 instance_type     = "m1.small"
-my_image          = "Ubuntu-24-04"
+// image_id          = "Ubuntu-24-04"
 
 
 
