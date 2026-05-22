@@ -1,6 +1,6 @@
 # ── Call the network module ───────────────────────────────────────────────────
 module "lustre_net" {
-  source = "~/Documents/Git/Terraform_Lustre/Lustre_Net/main.tf"
+  source = "./~/Documents/Git/Terraform_Lustre/Lustre_Net/main.tf"
   # /home/ubuntu/Terraform_Lustre/Lustre_Net
 
   external_network_name = var.external_network_name
