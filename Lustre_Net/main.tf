@@ -2,41 +2,48 @@
 
 
 # Look up the existing external (provider) network
-data "openstack_networking_network" "external" {
+data "openstack_networking_network_v2" "external" {
   name     = var.external_network_name
   external = true
 }
 
 # New tenant network
-resource "openstack_networking_network" "test_net" {
+
+resource "openstack_networking_network_v2" "Lustre_Network" {
   name           = var.network_name
   admin_state_up = true
-}
-
-# Subnet 10.0.20.0/24
-resource "openstack_networking_subnet" "test_subnet" {
-  name            = "${var.network_name}-subnet"
-  network_id      = openstack_networking_network.test_net.id
-  cidr            = var.subnet_cidr
-  ip_version      = 4
-  dns_nameservers = var.dns_nameservers 
-    tags = {
+  tags = {
     Tier = "Private"
-    name = "Lustre_subnet"
+    subnet_name = "Lustre_subnet"
   }
 }
 
+
+resource "openstack_networking_subnet_v2" "subnet_1" {
+  network_id = openstack_networking_network_v2.Lustre_Network.id
+  cidr       = "10.0.20.0/24"
+  ip_version = 4
+  dns_nameservers = ["8.8.8.8", "1.1.1.1"]
+}
+
+resource "openstack_networking_subnet_route_v2" "Lustre_subnet" {
+  subnet_id       = openstack_networking_network_v2.Lustre_Network.id
+  destination_cidr = "192.168.178.0/24"
+  next_hop        = "192.168.178.1"
+
+}
+
 # Router with uplink to external network
-resource "openstack_networking_router" "test_router" {
+resource "openstack_networking_router_v2" "test_router" {
   name                = var.router_name
   admin_state_up      = true
   external_network_id = data.openstack_networking_network.external.id
 }
 
 # Attach the subnet to the router
-resource "openstack_networking_router_interface" "test_router_iface" {
-  router_id = openstack_networking_router.test_router.id
-  subnet_id = openstack_networking_subnet.test_subnet.id
+resource "openstack_networking_router_interface_v2" "test_router_iface" {
+  router_id = openstack_networking_router_v2.test_router.id
+  subnet_id = openstack_networking_subnet_route_v2.test_subnet.id
 }
 
 # resource "aws_vpc" "lustre_vpc" {

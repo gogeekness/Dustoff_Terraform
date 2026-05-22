@@ -1,6 +1,6 @@
 # ── Call the network module ───────────────────────────────────────────────────
 module "lustre_net" {
-  source = "./modules/lustre_net"
+  source = "~/Documents/Git/Terraform_Lustre/Lustre_Net/main.tf"
   # /home/ubuntu/Terraform_Lustre/Lustre_Net
 
   external_network_name = var.external_network_name
@@ -11,26 +11,26 @@ module "lustre_net" {
 
 # ── Render cloud-init ─────────────────────────────────────────────────────────
 data "template_file" "user_data" {
-  template = file("${path.module}/cloud-init/user-data.yaml.tpl")
+  template = file("${path.module}/templates/user-data.yaml.tpl")
   vars = {
     ssh_public_key = var.ssh_public_key
   }
 }
 
 # ── Ubuntu image reference ────────────────────────────────────────────────────
-data "openstack_images_image" "ubuntu_2404" {
+data "openstack_images_image_v2" "ubuntu_2404" {
   id = "2cf93f7d-8a8f-4153-b7c7-aaaa54ae1e98"
 }
 
 # ── Boot volume ───────────────────────────────────────────────────────────────
-resource "openstack_blockstorage_volume" "root" {
+resource "openstack_blockstorage_volume_v3" "root" {
   name     = "${var.instance_name}-root"
   size     = 20
-  image_id = data.openstack_images_image.ubuntu_2404.id
+  image_id = data.openstack_images_image_v2.ubuntu_2404.id
 }
 
 # ── Instance ──────────────────────────────────────────────────────────────────
-resource "openstack_compute_instance" "vm" {
+resource "openstack_compute_instance_v2" "vm" {
   name            = var.instance_name
   flavor_name     = var.flavor_name
   key_pair        = var.keypair_name
@@ -53,11 +53,11 @@ resource "openstack_compute_instance" "vm" {
 }
 
 # ── Floating IP ─── Capture ─────────────────────────────────────────────────────
-resource "openstack_networking_floatingip" "fip" {
+resource "openstack_networking_floatingip_v2" "fip" {
   pool = module.lustre_net.external_network_name
 }
 
-resource "openstack_compute_floatingip_associate" "fip_assoc" {
-  floating_ip = openstack_networking_floatingip.fip.address
-  instance_id = openstack_compute_instance.vm.id
+resource "openstack_compute_floatingip_associate_v2" "fip_assoc" {
+  floating_ip = openstack_networking_floatingip_v2.fip.address
+  instance_id = openstack_compute_instance_v2.vm.id
 }
