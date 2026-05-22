@@ -34,8 +34,6 @@ variable "openstack_key_pub" {
   sensitive = true
 }
 
-
-
 variable "instance_type" {
   type        = string
   description = "Instance Size"
