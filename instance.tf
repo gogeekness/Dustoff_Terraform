@@ -1,12 +1,12 @@
 # ── Call the network module ───────────────────────────────────────────────────
-module "lust_net" {
+module "lust_net2" {
   source = "./Lustre_Net"
 
   ssh_key_location   = var.openstack_key_pub
-  external_network_name = lust_net_external_network_name
-  network_name          = lust_net_network_name
-  subnet_cidr           = lust_net_subnet_cidr
-  router_name           = lust_net_router_name  
+  external_network_name = lust_net2.external_network_name
+  network_name          = lust_net2.network_name
+  subnet_cidr           = lust_net2.subnet_cidr
+  router_name           = lust_net2.router_name  
 
 }
 
@@ -47,14 +47,14 @@ resource "openstack_compute_instance_v2" "vm" {
   }
 
   network {
-    uuid = module.lustre_net.network_id   # <-- from module output
+    uuid = module.lust_net2.network_id   # <-- from module output
   }
-  depends_on = [module.lustre_net.router_interface_id]
+  depends_on = [module.lust_net2.router_interface_id]
 }
 
 # ── Floating IP ─── Capture ─────────────────────────────────────────────────────
 resource "openstack_networking_floatingip_v2" "fip" {
-  pool = module.lustre_net.external_network_name
+  pool = module.lust_net2.external_network_name
 }
 
 resource "openstack_compute_floatingip_associate_v2" "fip_assoc" {
