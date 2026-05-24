@@ -2,11 +2,23 @@
 ## This contains the instance notaction
 ## 
 
+# output "network_id" {
+# output "subnet_id" {
+# output "router_id" {
+# output "external_network_id" {
+# output "router_interface_id" {
+# output "external_network_name" {
+# output "lust_net_cidr" {
+
 module "lust_net" {
   source = "./Lustre_Net"
-  # region             = var.region
-  # availability_zone  = var.availability_zone
+
   ssh_key_location   = var.openstack_key_pub
+  external_network_name = lust_net.external_network_name
+  network_name          = lust_net.network_name
+  subnet_cidr           = lust_net.subnet_cidr
+  router_name           = lust_net.router_name  
+
 }
 
 # for each node of this small cluster
@@ -31,7 +43,7 @@ variable "server_list" {
         Role    = "manager"
         Project = "lustre"
       }
-    },
+    }
     # {
     #   host_name     = "lustre_oss"
     #   instance_type = "t3.xlarge"
@@ -126,33 +138,10 @@ resource "openstack_compute_instance" "Lustre_servers" {
 }
 
 ### output public IP address
-
-resource "openstack_networking_network" "network_1" {
-  name           = "network_1"
-  admin_state_up = "true"
+output "server_public_ips" {
+  description = "Public IP addresses of the servers"
+  value       = { for server in openstack_compute_instance.Lustre_servers : server.key => server.associate_public_ip_address ? server.public_ip : null }
 }
 
-resource "openstack_compute_instance" "instance_1" {
-  name            = "instance_1"
-  security_groups = ["default"]
-}
-
-resource "openstack_compute_interface_attach" "ai_1" {
-  instance_id = openstack_compute_instance.instance_1.id
-  network_id  = openstack_networking_network.network_1.id
-}
-
-
-
-output "OpenStack_global_ips" {
-  value = [for instance in openstack_instance.Lustre_servers : instance.public_ip]
-}
-output "OpenStack_private_ips" {
-  value = [for instance in openstack_instance.Lustre_servers : instance.private_ip]
-}
-
-output "client_public_ip" {
-  value = openstack_instance.Lustre_servers["lustre_client"].public_ip
-}
 
 ## ENDE

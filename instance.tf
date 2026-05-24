@@ -1,13 +1,13 @@
 # ── Call the network module ───────────────────────────────────────────────────
-module "lustre_net" {
-  source = "./Lustre_Net/main.tf"
+module "lust_net" {
+  source = "./Lustre_Net"
 
-  # /home/ubuntu/Terraform_Lustre/Lustre_Net
+  ssh_key_location   = var.openstack_key_pub
+  external_network_name = lust_net_external_network_name
+  network_name          = lust_net_network_name
+  subnet_cidr           = lust_net_subnet_cidr
+  router_name           = lust_net_router_name  
 
-  external_network_name = var.external_network_name
-  network_name          = var.network_name
-  subnet_cidr           = var.subnet_cidr
-  router_name           = var.router_name
 }
 
 # ── Render cloud-init ─────────────────────────────────────────────────────────
@@ -49,7 +49,6 @@ resource "openstack_compute_instance_v2" "vm" {
   network {
     uuid = module.lustre_net.network_id   # <-- from module output
   }
-
   depends_on = [module.lustre_net.router_interface_id]
 }
 
