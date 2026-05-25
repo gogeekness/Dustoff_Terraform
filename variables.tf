@@ -21,12 +21,6 @@ variable "flavor_name" {
   default = "m1.small"
 }
 
-variable "keypair_name" {
-  description = "Name of an existing Nova keypair for SSH access"
-  type        = string
-  default     = "default"
-}
-
 variable "openstack_key_pub" {
   type        = string
   description = "Main SSH Key"
@@ -44,3 +38,10 @@ variable "openstack_user" {
   description = "Key user for teh cluster"
   default = "reseke"
 }
+
+variable "network_id" {
+  type        = string
+  description = "Network ID for the cluster"
+  default = "fill"
+}
+
