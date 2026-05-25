@@ -18,6 +18,12 @@ variable "subnet_cidr" {
   default = "10.0.20.0/24"
 }
 
+variable "subnet_name" {
+  description = "Name for the new subnet"
+  type        = string
+  default     = "lustre-test-subnet"
+}
+
 variable "router_name" {
   description = "Name for the new router"
   type        = string
@@ -33,16 +39,4 @@ variable "dns_nameservers" {
 variable "flavor_name" {
   type    = string
   default = "m1.small"
-}
-
-variable "keypair_name" {
-  type    = string
-  default = "id_rasa"
-}
-
-variable "ssh_key_location" {
-  type = string
-  description = "SSH key location"
-  default = "/home/reseke/.ssh/id.rsa"
-  sensitive = true
 }

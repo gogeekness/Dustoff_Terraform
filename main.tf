@@ -2,24 +2,29 @@
 ## This contains the instance notaction
 ## 
 
-# output "network_id" {
-# output "subnet_id" {
-# output "router_id" {
-# output "external_network_id" {
-# output "router_interface_id" {
-# output "external_network_name" {
-# output "lust_net_cidr" {
 
 module "lust_net" {
   source = "./Lustre_Net"
 
-  ssh_key_location   = var.openstack_key_pub
   external_network_name = lust_net.external_network_name
   network_name          = lust_net.network_name
   subnet_cidr           = lust_net.subnet_cidr
   router_name           = lust_net.router_name  
 
 }
+
+variable "keypair_name" {
+  type    = string
+  default = "id_rasa"
+}
+
+variable "ssh_key_location" {
+  type = string
+  description = "SSH key location"
+  default = "/home/reseke/.ssh/id.rsa"
+  sensitive = true
+}
+
 
 # for each node of this small cluster
 # Terraform will assign the public IP dynamically
@@ -68,7 +73,6 @@ variable "server_list" {
     # }
   ]
 }
-
 
 locals {
   server_names = toset([for server in var.server_list : server.host_name])

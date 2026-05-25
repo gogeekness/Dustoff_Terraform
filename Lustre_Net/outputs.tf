@@ -3,17 +3,17 @@
 
 output "network_id" {
   description = "ID of the created tenant network"
-  value       = openstack_networking_network.net.id
+  value       = openstack_networking_network_v2.Lustre_Network.id
 }
 
 output "subnet_id" {
   description = "ID of the created subnet"
-  value       = openstack_networking_subnet.subnet.id
+  value       = openstack_networking_subnet_v2.subnet.id
 }
 
-output "router_id" {
+output "router_interfaceid" {
   description = "ID of the created router"
-  value       = openstack_networking_router.router.id
+  value       = openstack_networking_router.interface_v2.Lustre_Router.id 
 }
 
 output "external_network_id" {
@@ -21,18 +21,3 @@ output "external_network_id" {
   value       = data.openstack_networking_network.external.id
 }
 
-# Convenience: expose the router interface so instance.tf can depend_on it
-output "router_interface_id" {
-  description = "Router interface resource ID — use in depends_on"
-  value       = openstack_networking_router_interface.router_iface.id
-}
-
-output "external_network_name" {
-  description = "Name of the external network (for floating IP pool)"
-  value       = openstack_networking_network.external.name
-}
-
-output "lust_net_cidr" {
-  description = "CIDR of the created subnet"
-  value       = var.subnet_cidr
-}
