@@ -8,7 +8,6 @@ data "openstack_images_image_v2" "ubuntu_24-04"{
   most_recent       = true
 }
 
-
 #  disk_format      = "qcow2"
 #  container_format = "bare"
 #  visibility       = "public"
