@@ -1,8 +1,6 @@
 # ── Call the network module ───────────────────────────────────────────────────
 module "lust_net2" {
   source = "./Lustre_Net"
-
-  ssh_key_location   = var.openstack_key_pub
   external_network_name = lust_net2.external_network_name
   network_name          = lust_net2.network_name
   subnet_cidr           = lust_net2.subnet_cidr
