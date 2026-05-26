@@ -15,14 +15,12 @@ module "lust_net" {
 
 variable "keypair_name" {
   type    = string
-  default = "id_rasa"
+  default = "Lustre_VM"
 }
 
-variable "ssh_key_location" {
-  type = string
-  description = "SSH key location"
-  default = "/home/reseke/.ssh/id.rsa"
-  sensitive = true
+resource "openstack_compute_keypair_v2" "ssh_key" {
+  name       = var.keypair_name
+  public_key = file("/home/ubuntu/ssh/lustretest.pub")
 }
 
 
@@ -42,7 +40,6 @@ variable "server_list" {
       instance_type = "m1.small"
       ipv4          = "10.0.20.10"
       public_ip     = ""
-      image_name    = "Ubuntu-24-04"
       tags = {
         Name    = "lustre_mgt"
         Role    = "manager"
@@ -111,7 +108,7 @@ resource "openstack_compute_instance" "Lustre_servers" {
   name            = each.value.host_name
   # host_id         = "${each.key}"
   flavor_id       = each.value.flavor_name
-  image_id        = each.value.image_name
+  image_id        = data.openstack_images_image_v2.ubuntu_24-04.id
   subnet_id       = module.lust_net.subnet_id
   private_ip      = each.value.ipv4
   key_name        = openstack_key_pair.Lustre_Key.key_name
@@ -133,7 +130,7 @@ resource "openstack_compute_instance" "Lustre_servers" {
     {
       Name = each.value.host_name
     },
-    each.value.tagshh
+    each.value.tags
   )
 
   network {
