@@ -6,10 +6,10 @@
 module "lust_net" {
   source = "./Lustre_Net"
 
-  external_network_name = lust_net.external_network_name
-  network_name          = lust_net.network_name
-  subnet_cidr           = lust_net.subnet_cidr
-  router_name           = lust_net.router_name  
+  external_network_name = var.external_network_name
+  network_name          = var.network_name
+  subnet_cidr           = var.subnet_cidr
+  router_name           = var.router_name
 
 }
 
@@ -78,22 +78,22 @@ locals {
 
 # EBS volumes main Data drive 500 GB drive for the oss
 # This is only a test drive.
-resource "openstack_ebs_volume" "zfs_data_drive" {
-  availability_zone = module.lust_net.availability_zone
-  size             = 500  #GB 
-  type             = "gp3"
-  tags = {
-    Name = "data-drive-oss-server"
-  }
-}
+# resource "openstack_ebs_volume" "zfs_data_drive" {
+#   availability_zone = module.lust_net.availability_zone
+#   size             = 500  #GB 
+#   type             = "gp3"
+#   tags = {
+#     Name = "data-drive-oss-server"
+#   }
+# }
 
 
 # Attach large drive specifically to OSS server
-resource "openstack_volume_attachment" "oss_large_drive" {
-  device_name = "/dev/sdz"  # Set as -last- drive for the oss
-  volume_id   = openstack_ebs_volume.zfs_data_drive.id
-  instance_id = openstack_instance.Lustre_servers["lustre_oss"].id
-}
+# resource "openstack_volume_attachment" "oss_large_drive" {
+#   device_name = "/dev/sdz"  # Set as -last- drive for the oss
+#   volume_id   = openstack_ebs_volume.zfs_data_drive.id
+#   instance_id = openstack_instance.Lustre_servers["lustre_oss"].id
+# }
 
 resource "openstack_key_pair" "Lustre_Key" {
   # the name for the resource adding the RSA key to servers
@@ -139,10 +139,10 @@ resource "openstack_compute_instance" "Lustre_servers" {
 }
 
 ### output public IP address
-output "server_public_ips" {
-  description = "Public IP addresses of the servers"
-  value       = { for server in openstack_compute_instance.Lustre_servers : server.key => server.associate_public_ip_address ? server.public_ip : null }
-}
+# output "server_public_ips" {
+#   description = "Public IP addresses of the servers"
+#   value       = { for server in openstack_compute_instance.Lustre_servers : server.key => server.associate_public_ip_address ? server.public_ip : null }
+# }
 
 
 ## ENDE

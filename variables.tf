@@ -45,3 +45,20 @@ variable "network_id" {
   default = "fill"
 }
 
+variable "external_network_name" {
+  type        = string
+  description = "Name of the external network"
+  default = "lust_net_external"
+}
+
+variable "network_name" {
+  type        = string
+  description = "Name of the tenant network"
+  default = "lust_net"
+}
+variable "subnet_cidr" {
+  type        = string
+  description = "CIDR for the subnet"
+  default = "10.0.20.0/24"
+}
+

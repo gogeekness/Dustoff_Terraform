@@ -51,11 +51,11 @@ resource "openstack_compute_instance_v2" "vm" {
 }
 
 # ── Floating IP ─── Capture ─────────────────────────────────────────────────────
-resource "openstack_networking_floatingip_v2" "fip" {
-  pool = module.lust_net2.external_network_name
-}
+# resource "openstack_networking_floatingip_v2" "fip" {
+#   pool = module.lust_net2.external_network_name
+# }
 
-resource "openstack_compute_floatingip_associate_v2" "fip_assoc" {
-  floating_ip = openstack_networking_floatingip_v2.fip.address
-  instance_id = openstack_compute_instance_v2.vm.id
-}
+# resource "openstack_compute_floatingip_associate_v2" "fip_assoc" {
+#   floating_ip = openstack_networking_floatingip_v2.fip.address
+#   instance_id = openstack_compute_instance_v2.vm.id
+# }
