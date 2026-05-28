@@ -1,11 +1,7 @@
 ## Only net specific var definitions are placed here. 
 ## aveialabity zone is one key var needed
 
-variable "external_network_name" {
-  description = "Name of the existing external/provider network"
-  type        = string
-  default = "public"
-}
+
 variable "network_name" {
   description = "Name for the new tenant network"
   type        = string
@@ -34,9 +30,4 @@ variable "dns_nameservers" {
   description = "DNS servers assigned to the subnet"
   type        = list(string)
   default     = ["8.8.8.8", "1.1.1.1"]
-}
-
-variable "flavor_name" {
-  type    = string
-  default = "m1.small"
 }

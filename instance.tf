@@ -1,7 +1,6 @@
 # ── Call the network module ───────────────────────────────────────────────────
 module "lust_net2" {
   source = "./Lustre_Net"
-  external_network_name = lust_net2.external_network_name
   network_name          = lust_net2.network_name
   subnet_cidr           = lust_net2.subnet_cidr
   router_name           = lust_net2.router_name  
@@ -9,12 +8,13 @@ module "lust_net2" {
 }
 
 # ── Render cloud-init ─────────────────────────────────────────────────────────
-data "template_file" "user_data" {
-  template = file("${path.module}/templates/user-data.yaml.tpl")
-  vars = {
-    ssh_public_key = var.ssh_public_key
-  }
-}
+
+# data "template_file" "user_data" {
+#   template = file("${path.module}/templates/user-data.yaml.tpl")
+#   vars = {
+#     ssh_public_key = var.ssh_public_key
+#   }
+# }
 
 # ── Ubuntu image reference ────────────────────────────────────────────────────
 data "openstack_images_image_v2" "ubuntu_2404" {
@@ -34,7 +34,7 @@ resource "openstack_compute_instance_v2" "vm" {
   flavor_name     = var.flavor_name
   key_pair        = var.keypair_name
   security_groups = [openstack_networking_secgroup.ssh.name]
-  user_data       = data.template_file.user_data.rendered
+  # user_data       = data.template_file.user_data.rendered
 
   block_device {
     uuid                  = openstack_blockstorage_volume.root.id

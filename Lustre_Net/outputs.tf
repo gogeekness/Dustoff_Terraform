@@ -16,8 +16,3 @@ output "router_interfaceid" {
   value       = openstack_networking_router.interface_v2.Lustre_Router.id 
 }
 
-output "external_network_id" {
-  description = "ID of the external network (for floating IP pool)"
-  value       = data.openstack_networking_network.external.id
-}
-
