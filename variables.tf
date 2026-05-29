@@ -45,11 +45,11 @@ variable "network_id" {
   default = "fill"
 }
 
-variable "external_network_name" {
-  type        = string
-  description = "Name of the external network"
-  default = "lust_net_external"
-}
+# variable "external_network_name" {
+#   type        = string
+#   description = "Name of the external network"
+#   default = "lust_net_external"
+# }
 
 variable "network_name" {
   type        = string

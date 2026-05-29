@@ -7,7 +7,7 @@ router_name           = "lust_net2_router"
 instance_name         = "lust_net2_vm"
 flavor_name           = "m1.small"
 keypair_name          = "reseke-key"
-external_network_name = "lust_net2_external"
+# external_network_name = "lust_net2_external"
 network_name          = "lust_net2"
 subnet_cidr           = "10.0.20.0/24"
 

@@ -6,7 +6,7 @@
 module "lust_net" {
   source = "./Lustre_Net"
 
-  external_network_name = var.external_network_name
+  # external_network_name = var.external_network_name
   network_name          = var.network_name
   subnet_cidr           = var.subnet_cidr
   router_name           = var.router_name
