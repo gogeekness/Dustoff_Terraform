@@ -1,11 +1,11 @@
 # ── Call the network module ───────────────────────────────────────────────────
-module "lust_net" {
-  source = "./Lustre_Net"
-  network_name          = lust_net.network_name
-  subnet_cidr           = lust_net.subnet_cidr
-  router_name           = lust_net.router_name
+# module "lust_net" {
+#   source = "./Lustre_Net"
+#   network_name          = lust_net.network_name
+#   subnet_cidr           = lust_net.subnet_cidr
+#   router_name           = lust_net.router_name
 
-}
+# }
 
 # ── Render cloud-init ─────────────────────────────────────────────────────────
 
