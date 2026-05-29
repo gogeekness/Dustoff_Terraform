@@ -1,6 +1,6 @@
-## Main ft file.
-## This contains the instance notaction
-## 
+## Main Terraform file.
+## This file is the main entry point for Terraform. It defines the resources to be created and how they are connected.
+## It calls the other resorces and modules, and defines the variables and outputs.  
 
 
 module "lust_net" {
