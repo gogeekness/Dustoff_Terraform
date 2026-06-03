@@ -46,18 +46,6 @@ variable "network_id" {
   default = "fill"
 }
 
-variable "instance_name" {
-  type        = string
-  description = "Name for the instance"
-  default = "lustre_test_vm"
-}
-
-# variable "external_network_name" {
-#   type        = string
-#   description = "Name of the external network"
-#   default = "lust_net_external"
-# }
-
 variable "network_name" {
   type        = string
   description = "Name of the tenant network"
