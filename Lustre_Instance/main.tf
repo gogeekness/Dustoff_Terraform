@@ -1,13 +1,5 @@
-# ── Call the network module ───────────────────────────────────────────────────
-# module "lust_net" {
-#   source = "./Lustre_Net"
-#   network_name          = lust_net.network_name
-#   subnet_cidr           = lust_net.subnet_cidr
-#   router_name           = lust_net.router_name
-
-# }
-
-# ── Render cloud-init ─────────────────────────────────────────────────────────
+### instance creation and configuration
+###
 
 # data "template_file" "user_data" {
 #   template = file("${path.module}/templates/user-data.yaml.tpl")

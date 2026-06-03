@@ -11,11 +11,27 @@ module "lust_net" {
   subnet_cidr           = var.subnet_cidr
   router_name           = var.router_name
 
+  subnet_id             = var.subnet_id
+  vpc_security_group_ids = [module.lust_net.security_group.id]
+}
+
+module "Lustre_Instance" {
+  source = "./Lustre_Instance"
+
+  instance_name   = var.instance_name
+  flavor_name     = var.flavor_name
+  keypair_name    = var.keypair_name
 }
 
 variable "keypair_name" {
   type    = string
   default = "Lustre_VM"
+}
+
+data "openstack_images_image_v2" "ubuntu_24-04"{
+  # source            = "/v2/images/2cf93f7d-8a8f-4153-b7c7-aaaa54ae1e98/file"
+  name              = "Ubuntu 24.04 LTS"
+  most_recent       = true
 }
 
 resource "openstack_compute_keypair_v2" "ssh_key" {
@@ -102,20 +118,14 @@ resource "openstack_key_pair" "Lustre_Key" {
   # public_key = file("./ssh/lustretest.pub")  #defined in screts
 }
 
-resource "openstack_compute_instance" "Lustre_servers" {
+resource "openstack_compute_instance_v2" "Lustre_servers" {
   for_each        = { for server in var.server_list : server.host_name => server }
   #for_each        = toset(var.server_list)
   name            = each.value.host_name
   # host_id         = "${each.key}"
   flavor_id       = each.value.flavor_name
   image_id        = data.openstack_images_image_v2.ubuntu_24-04.id
-  subnet_id       = module.lust_net.subnet_id
-  private_ip      = each.value.ipv4
-  key_name        = openstack_key_pair.Lustre_Key.key_name
-  associate_public_ip_address = each.key == "lustre_client" ? true : false
 
-    # the one we created as "RESOURCE 1) Also we now use the "openstack_security_group" of RESOURCE 2) above
-  vpc_security_group_ids = [module.lust_net.security_group.id]
 
   block_device {
     uuid                  = data.openstack_images_image.ubuntu_2404.id
@@ -138,6 +148,14 @@ resource "openstack_compute_instance" "Lustre_servers" {
   }
 }
 
+
+  subnet_id       = module.lust_net.subnet_id
+  private_ip      = each.value.ipv4
+  key_name        = openstack_key_pair.Lustre_Key.key_name
+  associate_public_ip_address = each.key == "lustre_client" ? true : false
+  vpc_security_group_ids = [module.lust_net.security_group.id]
+
+  
 ### output public IP address
 # output "server_public_ips" {
 #   description = "Public IP addresses of the servers"

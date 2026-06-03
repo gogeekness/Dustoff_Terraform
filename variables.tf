@@ -33,6 +33,7 @@ variable "instance_type" {
   description = "Instance Size"
   sensitive   = false
 }
+
 variable "openstack_user" {
   type        = string
   description = "Key user for teh cluster"
@@ -43,6 +44,12 @@ variable "network_id" {
   type        = string
   description = "Network ID for the cluster"
   default = "fill"
+}
+
+variable "instance_name" {
+  type        = string
+  description = "Name for the instance"
+  default = "lustre_test_vm"
 }
 
 # variable "external_network_name" {
@@ -56,9 +63,15 @@ variable "network_name" {
   description = "Name of the tenant network"
   default = "lust_net"
 }
+
 variable "subnet_cidr" {
   type        = string
   description = "CIDR for the subnet"
   default = "10.0.20.0/24"
 }
 
+variable "subnet_id" {
+  type        = string
+  description = "ID for the subnet"
+  default = "subnet-12345"
+}

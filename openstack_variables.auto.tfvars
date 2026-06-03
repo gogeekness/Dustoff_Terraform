@@ -3,15 +3,13 @@
 #
 
 
-router_name           = "lust_net2_router"
-instance_name         = "lust_net2_vm"
+router_name           = "lust_net_router"
+instance_name         = "lust_net_vm"
 flavor_name           = "m1.small"
 keypair_name          = "reseke-key"
 # external_network_name = "lust_net2_external"
-network_name          = "lust_net2"
+network_name          = "lust_net"
 subnet_cidr           = "10.0.20.0/24"
-
-
 
 // image_id          = "Ubuntu-24-04"
 

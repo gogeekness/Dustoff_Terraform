@@ -11,7 +11,6 @@ resource "openstack_networking_network_v2" "Lustre_Network" {
   }
 }
 
-
 resource "openstack_networking_subnet_v2" "subnet_1" {
   network_id = openstack_networking_network_v2.Lustre_Network.id
   cidr       = var.subnet_cidr
