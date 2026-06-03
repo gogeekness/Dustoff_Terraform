@@ -149,11 +149,11 @@ resource "openstack_compute_instance_v2" "Lustre_servers" {
 }
 
 
-  subnet_id       = module.lust_net.subnet_id
-  private_ip      = each.value.ipv4
-  key_name        = openstack_key_pair.Lustre_Key.key_name
-  associate_public_ip_address = each.key == "lustre_client" ? true : false
-  vpc_security_group_ids = [module.lust_net.security_group.id]
+  # subnet_id       = module.lust_net.subnet_id
+  # private_ip      = each.value.ipv4
+  # key_name        = openstack_key_pair.Lustre_Key.key_name
+  # associate_public_ip_address = each.key == "lustre_client" ? true : false
+  # vpc_security_group_ids = [module.lust_net.security_group.id]
 
   
 ### output public IP address
