@@ -47,7 +47,7 @@ variable "Lserver_list" {
       instance_type = "m1.small"
       ipv4          = "10.0.20.10"
       public_ip     = ""
-      ssh-key       = var.lustre_public-key
+      ssh-key       = "~/.ssh/id_rsa.pub"
       OS-size       = "20"
       tags = {
         Name    = "lustre_mgt"

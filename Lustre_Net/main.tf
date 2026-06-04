@@ -11,14 +11,14 @@ resource "openstack_networking_network_v2" "Lustre_Network" {
   }
 }
 
-resource "openstack_networking_subnet_v2" "subnet_1" {
+resource "openstack_networking_subnet_v2" "Lustre_subnet" {
   network_id = openstack_networking_network_v2.Lustre_Network.id
   cidr       = var.subnet_cidr
   ip_version = 4
   dns_nameservers = var.dns_nameservers
 }
 
-resource "openstack_networking_subnet_route_v2" "Lustre_subnet" {
+resource "openstack_networking_subnet_route_v2" "Lustre_route" {
   subnet_id       = openstack_networking_network_v2.Lustre_Network.id
   destination_cidr = "10.0.10.0/24"
   next_hop        = "10.0.10.1"
@@ -26,16 +26,16 @@ resource "openstack_networking_subnet_route_v2" "Lustre_subnet" {
 }
 
 # Router with uplink to external network
-resource "openstack_networking_router_v2" "test_router" {
+resource "openstack_networking_router_v2" "Lustre_router" {
   name                = var.router_name
   admin_state_up      = true
   external_network_id = data.openstack_networking_network.external.id
 }
 
 # Attach the subnet to the router
-resource "openstack_networking_router_interface_v2" "test_router_iface" {
-  router_id = openstack_networking_router_v2.test_router.id
-  subnet_id = openstack_networking_subnet_route_v2.test_subnet.id
+resource "openstack_networking_router_interface_v2" "Lustre_router_iface" {
+  router_id = openstack_networking_router_v2.Lustre_router.id
+  subnet_id = openstack_networking_subnet_route_v2.Lustre_route.id
 }
 
 # resource "aws_vpc" "lustre_vpc" {
