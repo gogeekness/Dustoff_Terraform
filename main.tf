@@ -85,6 +85,19 @@ locals {
   inventory = ""
 }
 
+module "lustre_instance" {
+  for_each          = { for Lserver in var.Lserver_list : Lserver.host_name => Lserver }
+  source            = "./Lustre_Instance"
+
+  instance_name     = each.value.host_name
+  instance_type     = each.value.instance_type
+  network_id        = module.lustre_net.network_id
+  openstack_key_pub = each.value.ssh-key
+  OS-size           = each.value.OS-size
+
+  depends_on = [module.lust_net]
+}
+
 # module "Lustre_Instance" {
 #   for_each        = { for Lserver in var.Lserver_list : Lserver.host_name => Lserver }
 #   source          = "./Lustre_Instance"
@@ -94,39 +107,5 @@ locals {
 #   openstack_key_pub   = public_key.name
 # }
 
-module "lustre_instance" {
-  for_each          = { for Lserver in var.Lserver_list : Lserver.host_name => Lserver }
-  source            = "./Lustre_Instance"
-
-  instance_name    = each.value.host_name
-  instance_type    = each.value.instance_type
-  network_id       = module.lustre_net.network_id
-  openstack_key_pub = each.value.ssh-key
-  OS-size          = each.value.OS-size
-
-  depends_on = [module.lustre_net]
-}
-
-
-resource openstack_glance_image_v2 "ubuntu_24-04_v2" {
-  block_device {
-    uuid                  = data.openstack_images_image_v2.ubuntu_24-04_v2.id
-    source_type           = "image"
-    destination_type      = "volume"
-    boot_index            = 0
-    delete_on_termination = true
-    volume_size           = 20 
-  }
-  tags = merge(
-    {
-      Name = each.value.host_name
-    },
-    each.value.tags
-  )
-
-  network {
-    uuid = module.lust_net.network_id   # <-- from module output
-  }
-}
 
 ## ENDE

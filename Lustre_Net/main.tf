@@ -6,7 +6,7 @@ resource "openstack_networking_network_v2" "Lustre_Network" {
   name           = var.network_name
   admin_state_up = true
   tags = {
-    Tier = "Private"
+    tier = "Private"
     subnet_name = "Lustre_subnet"
   }
 }
@@ -29,7 +29,7 @@ resource "openstack_networking_subnet_route_v2" "Lustre_route" {
 resource "openstack_networking_router_v2" "Lustre_router" {
   name                = var.router_name
   admin_state_up      = true
-  external_network_id = data.openstack_networking_network.external.id
+  external_network_id = openstack_networking_network.external.id
 }
 
 # Attach the subnet to the router
