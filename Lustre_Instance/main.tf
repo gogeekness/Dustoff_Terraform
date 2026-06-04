@@ -23,8 +23,8 @@ resource "openstack_blockstorage_volume_v3" "root" {
 # ── Instance ──────────────────────────────────────────────────────────────────
 resource "openstack_compute_instance_v2" "vm" {
   name            = var.instance_name
-  flavor_name     = var.flavor_name
-  key_pair        = var.keypair_name
+  flavor_name     = var.instance_type
+  key_pair        = var.openstack_key_pub
   security_groups = [openstack_networking_secgroup.ssh.name]
   # user_data       = data.template_file.user_data.rendered
 

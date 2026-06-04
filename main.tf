@@ -11,22 +11,16 @@ module "lust_net" {
   subnet_cidr           = var.subnet_cidr
   router_name           = var.router_name
 
-  subnet_id             = var.subnet_id
-  vpc_security_group_ids = [module.lust_net.security_group.id]
+  # subnet_id             = var.subnet_id
+  # vpc_security_group_ids = [module.lust_net.security_group.id]
 }
 
-module "Lustre_Instance" {
-  source = "./Lustre_Instance"
 
-  instance_name   = var.instance_name
-  flavor_name     = var.flavor_name
-  keypair_name    = var.keypair_name
+resource "openstack_compute_keypair_v2" "public-key" {
+  name = "lustre_public-key"
+  public_key = file(var.ssh-public-key-path)
 }
 
-variable "keypair_name" {
-  type    = string
-  default = "Lustre_VM"
-}
 
 data "openstack_images_image_v2" "ubuntu_24-04"{
   # source            = "/v2/images/2cf93f7d-8a8f-4153-b7c7-aaaa54ae1e98/file"
@@ -34,9 +28,9 @@ data "openstack_images_image_v2" "ubuntu_24-04"{
   most_recent       = true
 }
 
-resource "openstack_compute_keypair_v2" "ssh_key" {
-  name       = var.keypair_name
-  public_key = file("/home/ubuntu/ssh/lustretest.pub")
+resource "openstack_compute_keypair_v2" "lustre_ssh_key" {
+  name       = "lustre_ssh_key"
+  public_key = file(var.ssh-public-key-path)
 }
 
 
@@ -92,30 +86,13 @@ locals {
   inventory = ""
 }
 
-# EBS volumes main Data drive 500 GB drive for the oss
-# This is only a test drive.
-# resource "openstack_ebs_volume" "zfs_data_drive" {
-#   availability_zone = module.lust_net.availability_zone
-#   size             = 500  #GB 
-#   type             = "gp3"
-#   tags = {
-#     Name = "data-drive-oss-server"
-#   }
-# }
 
+module "Lustre_Instance" {
+  source = "./Lustre_Instance"
 
-# Attach large drive specifically to OSS server
-# resource "openstack_volume_attachment" "oss_large_drive" {
-#   device_name = "/dev/sdz"  # Set as -last- drive for the oss
-#   volume_id   = openstack_ebs_volume.zfs_data_drive.id
-#   instance_id = openstack_instance.Lustre_servers["lustre_oss"].id
-# }
-
-resource "openstack_key_pair" "Lustre_Key" {
-  # the name for the resource adding the RSA key to servers
-  key_name  = "Lustre_Key"
-  public_key = var.openstack_key_pub
-  # public_key = file("./ssh/lustretest.pub")  #defined in screts
+  instance_name       = var.instance_name
+  instance_type       = var.flavor_name
+  openstack_key_pub   = public_key.public_key 
 }
 
 resource "openstack_compute_instance_v2" "Lustre_servers" {

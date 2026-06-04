@@ -30,6 +30,6 @@ variable "network_id" {
 variable "instance_name" {
   type        = string
   description = "Name for the instance"
-  default = "lustre_test_vm"
+  default = "default_intstance_name"
 }
 

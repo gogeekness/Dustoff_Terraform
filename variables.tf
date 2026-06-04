@@ -21,16 +21,23 @@ variable "flavor_name" {
   default = "m1.small"
 }
 
-variable "openstack_key_pub" {
-  type        = string
-  description = "Main SSH Key"
-  # default = "Non-usable-keypair"
-  sensitive = true
+variable "keypair_name" {
+  type    = string
+  default = "lustretest.pub"
 }
 
-variable "instance_type" {
+
+variable "ssh-public-key-path" {
+  type = string
+  default = "~/.ssh/id_rsa.pub"
+  description = "../.ssh/lustretest.pub"
+  sensitive   = false
+}
+
+variable "name" {
   type        = string
-  description = "Instance Size"
+  description = "Instance Name"
+  default = "Lustre_Test"
   sensitive   = false
 }
 
