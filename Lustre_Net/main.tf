@@ -12,14 +12,14 @@ resource "openstack_networking_network_v2" "Lustre_Network" {
 }
 
 resource "openstack_networking_subnet_v2" "Lustre_subnet" {
-  network_id = openstack_networking_network_v2.Lustre_Network.id
+  network_id = Lustre_Network.id
   cidr       = var.subnet_cidr
   ip_version = 4
   dns_nameservers = var.dns_nameservers
 }
 
 resource "openstack_networking_subnet_route_v2" "Lustre_route" {
-  subnet_id       = openstack_networking_network_v2.Lustre_Network.id
+  subnet_id       = Lustre_Network.id
   destination_cidr = "10.0.10.0/24"
   next_hop        = "10.0.10.1"
 
