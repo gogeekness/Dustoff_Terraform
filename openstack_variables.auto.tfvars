@@ -11,7 +11,21 @@ keypair_name          = "lustretest.pub"
 network_name          = "lust_net"
 subnet_cidr           = "10.0.20.0/24"
 
-// image_id          = "Ubuntu-24-04"
+Lserver_list = [
+  {
+    host_name     = "lustre_mgt"
+    instance_type = "m1.small"
+    ipv4          = "10.0.20.10"
+    public_ip     = ""
+    ssh-key       = var.lustre_public-key
+    OS-size       = "20"
+    tags = {
+      Name    = "lustre_mgt"
+      Role    = "manager"
+      Project = "lustre"
+    }
+  }
+]
 
 
 

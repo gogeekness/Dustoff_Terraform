@@ -23,25 +23,22 @@ resource "openstack_compute_keypair_v2" "public-key" {
 
 
 data "openstack_images_image_v2" "ubuntu_24-04"{
-  # source            = "/v2/images/2cf93f7d-8a8f-4153-b7c7-aaaa54ae1e98/file"
+  # source          = "/v2/images/2cf93f7d-8a8f-4153-b7c7-aaaa54ae1e98/file"
   name              = "Ubuntu 24.04 LTS"
   most_recent       = true
-}
-
-resource "openstack_compute_keypair_v2" "lustre_ssh_key" {
-  name       = "lustre_ssh_key"
-  public_key = file(var.ssh-public-key-path)
 }
 
 
 # for each node of this small cluster
 # Terraform will assign the public IP dynamically
-variable "server_list" {
+variable "Lserver_list" {
   type = list(object({
     host_name     = string
     instance_type = string
     ipv4          = string
     public_ip     = string
+    ssh-key       = string
+    OS-size       = string
     tags          = map(string)
   }))
   default = [
@@ -50,6 +47,8 @@ variable "server_list" {
       instance_type = "m1.small"
       ipv4          = "10.0.20.10"
       public_ip     = ""
+      ssh-key       = var.lustre_public-key
+      OS-size       = "20"
       tags = {
         Name    = "lustre_mgt"
         Role    = "manager"
@@ -82,37 +81,42 @@ variable "server_list" {
 }
 
 locals {
-  server_names = toset([for server in var.server_list : server.host_name])
+  server_names = toset([for Lserver in var.Lserver_list : Lserver.host_name])
   inventory = ""
 }
 
+# module "Lustre_Instance" {
+#   for_each        = { for Lserver in var.Lserver_list : Lserver.host_name => Lserver }
+#   source          = "./Lustre_Instance"
 
-module "Lustre_Instance" {
-  source = "./Lustre_Instance"
+#   # instance_name       = each.value.host_name
+#   instance_type       = each.value.instance_type
+#   openstack_key_pub   = public_key.name
+# }
 
-  instance_name       = var.instance_name
-  instance_type       = var.flavor_name
-  openstack_key_pub   = public_key.public_key 
+module "lustre_instance" {
+  for_each          = { for Lserver in var.Lserver_list : Lserver.host_name => Lserver }
+  source            = "./Lustre_Instance"
+
+  instance_name    = each.value.host_name
+  instance_type    = each.value.instance_type
+  network_id       = module.lustre_net.network_id
+  openstack_key_pub = each.value.ssh-key
+  OS-size          = each.value.OS-size
+
+  depends_on = [module.lustre_net]
 }
 
-resource "openstack_compute_instance_v2" "Lustre_servers" {
-  for_each        = { for server in var.server_list : server.host_name => server }
-  #for_each        = toset(var.server_list)
-  name            = each.value.host_name
-  # host_id         = "${each.key}"
-  flavor_id       = each.value.flavor_name
-  image_id        = data.openstack_images_image_v2.ubuntu_24-04.id
 
-
+resource openstack_glance_image_v2 "ubuntu_24-04_v2" {
   block_device {
-    uuid                  = data.openstack_images_image.ubuntu_2404.id
+    uuid                  = data.openstack_images_image_v2.ubuntu_24-04_v2.id
     source_type           = "image"
     destination_type      = "volume"
     boot_index            = 0
     delete_on_termination = true
     volume_size           = 20 
   }
-
   tags = merge(
     {
       Name = each.value.host_name
@@ -124,20 +128,5 @@ resource "openstack_compute_instance_v2" "Lustre_servers" {
     uuid = module.lust_net.network_id   # <-- from module output
   }
 }
-
-
-  # subnet_id       = module.lust_net.subnet_id
-  # private_ip      = each.value.ipv4
-  # key_name        = openstack_key_pair.Lustre_Key.key_name
-  # associate_public_ip_address = each.key == "lustre_client" ? true : false
-  # vpc_security_group_ids = [module.lust_net.security_group.id]
-
-  
-### output public IP address
-# output "server_public_ips" {
-#   description = "Public IP addresses of the servers"
-#   value       = { for server in openstack_compute_instance.Lustre_servers : server.key => server.associate_public_ip_address ? server.public_ip : null }
-# }
-
 
 ## ENDE

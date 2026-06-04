@@ -9,6 +9,13 @@ variable "openstack_key_pub" {
   sensitive = true
 }
 
+variable "OS-size" {
+  type        = string
+  description = "Size of the root volume in GB"
+  default     = "20"
+  sensitive   = false
+}
+
 variable "instance_type" {
   type        = string
   description = "Instance Size"
