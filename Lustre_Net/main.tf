@@ -3,7 +3,8 @@
 # New tenant network
 # Needs a data source + variable:
 data "openstack_networking_network_v2" "external" {
-  name = external_network_name
+  name            = "${external_network_name}"
+  admin_state_up  = "true"
 }
 
 resource "openstack_networking_network_v2" "Lustre_Network" {
