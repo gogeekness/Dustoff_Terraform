@@ -8,11 +8,12 @@ output "network_id" {
 
 output "subnet_id" {
   description = "ID of the created subnet"
-  value       = openstack_networking_subnet_v2.subnet.id
+  value       = openstack_networking_subnet_v2.Lustre_subnet.id
 }
 
 output "router_interface_id" {
   description = "ID of the created router"
-  value       = openstack_networking_router.interface_v2.Lustre_Router.id 
+  value       = openstack_networking_router_v2.Lustre_router.id
+  
 }
 
