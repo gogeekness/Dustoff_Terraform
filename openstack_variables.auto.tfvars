@@ -7,9 +7,11 @@ router_name           = "lust_net_router"
 instance_name         = "lust_net_vm"
 flavor_name           = "m1.small"
 keypair_name          = "lustretest.pub"
-# external_network_name = "lust_net2_external"
+external_network_name = "Internal_line"
 network_name          = "lust_net"
 subnet_cidr           = "10.0.20.0/24"
+ssh-public-key-path  = "~/.ssh/id_rsa.pub"
+
 
 Lserver_list = [
   {
@@ -17,7 +19,7 @@ Lserver_list = [
     instance_type = "m1.small"
     ipv4          = "10.0.20.10"
     public_ip     = ""
-    ssh-key       = var.lustre_public-key
+    ssh-key       = local.ssh-public-key-path
     OS-size       = "20"
     tags = {
       Name    = "lustre_mgt"

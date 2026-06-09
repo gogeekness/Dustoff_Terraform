@@ -26,7 +26,6 @@ variable "keypair_name" {
   default = "lustretest.pub"
 }
 
-
 variable "ssh-public-key-path" {
   type = string
   default = "~/.ssh/id_rsa.pub"
@@ -43,7 +42,7 @@ variable "name" {
 
 variable "openstack_user" {
   type        = string
-  description = "Key user for teh cluster"
+  description = "Key user for the cluster"
   default = "reseke"
 }
 
@@ -69,4 +68,10 @@ variable "subnet_id" {
   type        = string
   description = "ID for the subnet"
   default = "subnet-12345"
+}
+
+variable "external_network_name" {
+  type        = string
+  description = "Name of the external network for floating IPs"
+  default = "Internal_line"
 }

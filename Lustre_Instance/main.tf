@@ -17,9 +17,10 @@ data "openstack_images_image_v2" "ubuntu_2404" {
 
 # ── Boot volume ───────────────────────────────────────────────────────────────
 resource "openstack_blockstorage_volume_v3" "root" {
-  name     = "${var.instance_name}-root"
-  size     = OS-size
-  image_id = data.openstack_images_image_v2.ubuntu_2404.id
+  name     = "${var.instance_name}"
+  size     = var.OS-size
+  image_id = openstack_blockstorage_volume_v3.root.id  
+  #image_id = data.openstack_images_image_v2.ubuntu_2404.id
 }
 
 # ── Instance ──────────────────────────────────────────────────────────────────
