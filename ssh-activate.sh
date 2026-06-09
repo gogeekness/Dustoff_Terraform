@@ -10,5 +10,5 @@ if ! agent_ok; then
 fi
 cat ~/.ssh/agent.info
 
-ssh-add ../.ssh/ed_lustre
-ssh-add ../.ssh/gh_tf
+ssh-add ~/.ssh/ed_lustre
+ssh-add ~/.ssh/gh_tf
