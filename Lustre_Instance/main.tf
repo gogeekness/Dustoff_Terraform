@@ -10,7 +10,9 @@
 
 # ── Ubuntu image reference ────────────────────────────────────────────────────
 data "openstack_images_image_v2" "ubuntu_2404" {
-  id = "2cf93f7d-8a8f-4153-b7c7-aaaa54ae1e98"
+  name        = "Ubuntu 24.04 LTS" 
+  most_recent = true
+  # id = "2cf93f7d-8a8f-4153-b7c7-aaaa54ae1e98"
 }
 
 # ── Boot volume ───────────────────────────────────────────────────────────────
@@ -25,11 +27,11 @@ resource "openstack_compute_instance_v2" "vm" {
   name            = var.instance_name
   flavor_name     = var.instance_type
   key_pair        = var.openstack_key_pub
-  security_groups = [openstack_networking_secgroup.ssh.name]
+  security_groups = [openstack_networking_secgroup_v2.lustre_sg.name]
   # user_data       = data.template_file.user_data.rendered
 
   block_device {
-    uuid                  = openstack_blockstorage_volume.root.id
+    uuid                  = var.instance_name
     source_type           = "volume"
     destination_type      = "volume"
     boot_index            = 0
