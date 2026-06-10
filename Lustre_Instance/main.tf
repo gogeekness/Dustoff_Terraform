@@ -2,7 +2,8 @@
 ##  This file defines the OpenStack resources for the Lustre cluster instances. 
 ##  It uses a module to create multiple instances based on a list of server configurations defined in variables.tf.
 
-# ── Ubuntu image reference ────────────────────────────────────────────────────
+
+# fetch the Ubuntu 24.04 image by name to get its ID.
 data "openstack_images_image_v2" "ubuntu_2404" {
   name        = "Ubuntu 24.04 LTS" 
   most_recent = true
@@ -37,7 +38,7 @@ resource "openstack_compute_instance_v2" "vm" {
     uuid = var.network_id
     # uuid = module.Lustre_Net.network_id   # <-- from module output
   }
-  depends_on = [module.Lustre_Net.router_interface_id]
+  depends_on = [module.Lustre_Net]  
 }
 
 # ── Floating IP ─── Capture ─────────────────────────────────────────────────────

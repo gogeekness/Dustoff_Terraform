@@ -2,7 +2,6 @@
 ## This file is the main entry point for Terraform. It defines the resources to be created and how they are connected.
 ## It calls the other resorces and modules, and defines the variables and outputs.  
 
-
 module "lust_net" {
   source = "./Lustre_Net"
 
@@ -17,19 +16,16 @@ module "lust_net" {
   # vpc_security_group_ids = [module.lust_net.security_group.id]
 }
 
-
 resource "openstack_compute_keypair_v2" "public-key" {
   name = "lustre_public-key"
   public_key = file(var.ssh-public-key-path)
 }
-
 
 data "openstack_images_image_v2" "ubuntu_24-04"{
   # source          = "/v2/images/2cf93f7d-8a8f-4153-b7c7-aaaa54ae1e98/file"
   name              = "Ubuntu 24.04 LTS"
   most_recent       = true
 }
-
 
 # for each node of this small cluster
 # Terraform will assign the public IP dynamically
@@ -98,6 +94,11 @@ module "lustre_instance" {
   OS-size           = each.value.OS-size
 
   depends_on = [module.lust_net]
+}
+
+output "instance_ids" {
+  description = "IDs of the created instances"
+  value       = { for name, inst in module.lustre_instance : name => inst.instance_id }
 }
 
 # module "Lustre_Instance" {
