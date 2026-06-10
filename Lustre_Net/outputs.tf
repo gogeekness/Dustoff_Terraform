@@ -3,8 +3,8 @@
 
 output "network_id" {
   description = "ID of the created tenant network"
-  value       = openstack_networking_network_v2.Lustre_Network.id
-}
+  value       = openstack_networking_network_v2.Lustre_Net.id
+  }
 
 output "subnet_id" {
   description = "ID of the created subnet"
