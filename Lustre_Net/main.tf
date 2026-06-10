@@ -14,6 +14,7 @@ resource "openstack_networking_network_v2" "Lustre_Network" {
   ]
 }
 
+# fetch the external network by name to get its ID for router uplink
 data "openstack_networking_network_v2" "External_Net" {
   name = var.external_network_name
 }
