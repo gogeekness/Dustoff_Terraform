@@ -73,6 +73,12 @@ variable "subnet_id" {
   default = "subnet-12345"
 }
 
+variable "subnet_name" {
+  type        = string
+  description = "Name of the subnet"
+  default = "lust_net_subnet"
+}
+
 variable "external_network_name" {
   type        = string
   description = "Name of the external network for floating IPs"

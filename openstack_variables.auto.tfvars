@@ -2,17 +2,21 @@
 ##  This file is for configration varables gernerally used by Tofu
 ##  This is for the Global cluster variables.
 
+# Net deffinitions
 router_name           = "lust_net_router"
+network_name          = "lust_net"
+subnet_cidr           = "10.0.20.0/24"
+subnet_name           = "lust_net_subnet"
+external_network_name = "Internal_line"
+dns_nameservers      = ["8.8.8.8", "1.1.1.1"]
+# external_network_name = "lust_net2" 
+
+
+# Instance deffinitions
 instance_name         = "lust_net_vm"
 flavor_name           = "m1.small"
 keypair_name          = "lustretest.pub"
-external_network_name = "Internal_line"
-network_name          = "lust_net"
-subnet_cidr           = "10.0.20.0/24"
 ssh-public-key-path  = "~/.ssh/id_rsa.pub"
-dns_nameservers      = ["8.8.8.8", "1.1.1.1"]
-
-
 
 Lserver_list = [
   {

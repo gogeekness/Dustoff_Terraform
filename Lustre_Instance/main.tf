@@ -23,8 +23,7 @@ resource "openstack_compute_instance_v2" "vm" {
   name            = var.instance_name
   flavor_name     = var.instance_type
   key_pair        = var.openstack_key_pub
-  security_groups = [openstack_networking_secgroup_v2.lustre_sg.name]
-  # user_data       = data.template_file.user_data.rendered
+  security_groups = [module.lust_net.security_group.name]
 
   block_device {
     uuid                  = var.instance_name
