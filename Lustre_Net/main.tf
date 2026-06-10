@@ -29,12 +29,12 @@ resource "openstack_networking_subnet_route_v2" "Lustre_route" {
 resource "openstack_networking_router_v2" "Lustre_router" {
   name                = var.router_name
   admin_state_up      = true
-  external_network_id = openstack_networking_network_v2.Lustre_Network.id
+  external_network_id = data.openstack_networking_network_v2.external.id
 }
 # Attach the subnet to the router
 resource "openstack_networking_router_interface_v2" "Lustre_router_iface" {
   router_id = openstack_networking_router_v2.Lustre_router.id
-  subnet_id = openstack_networking_subnet_route_v2.Lustre_route.id
+  subnet_id = openstack_networking_subnet_v2.Lustre_subnet.id
 }
 
 # resource "aws_vpc" "lustre_vpc" {
