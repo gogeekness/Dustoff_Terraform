@@ -1,12 +1,6 @@
-### instance creation and configuration
-###
-
-# data "template_file" "user_data" {
-#   template = file("${path.module}/templates/user-data.yaml.tpl")
-#   vars = {
-#     ssh_public_key = var.ssh_public_key
-#   }
-# }
+### Lustre_Instance / main.tf
+##  This file defines the OpenStack resources for the Lustre cluster instances. 
+##  It uses a module to create multiple instances based on a list of server configurations defined in variables.tf.
 
 # ── Ubuntu image reference ────────────────────────────────────────────────────
 data "openstack_images_image_v2" "ubuntu_2404" {
@@ -23,6 +17,7 @@ resource "openstack_blockstorage_volume_v3" "root" {
   #image_id = data.openstack_images_image_v2.ubuntu_2404.id
 }
 
+### build build build
 # ── Instance ──────────────────────────────────────────────────────────────────
 resource "openstack_compute_instance_v2" "vm" {
   name            = var.instance_name

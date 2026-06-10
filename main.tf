@@ -10,7 +10,9 @@ module "lust_net" {
   network_name          = var.network_name
   subnet_cidr           = var.subnet_cidr
   router_name           = var.router_name
-
+  external_network_name = var.external_network_name
+  dns_nameservers       = var.dns_nameservers
+   
   # subnet_id             = var.subnet_id
   # vpc_security_group_ids = [module.lust_net.security_group.id]
 }

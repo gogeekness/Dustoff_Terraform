@@ -31,3 +31,9 @@ variable "dns_nameservers" {
   type        = list(string)
   default     = ["8.8.8.8", "1.1.1.1"]
 }
+
+variable "external_network_name" {
+  description = "Name of the external network for floating IPs"
+  type        = string
+  default = "Internal_line"
+}

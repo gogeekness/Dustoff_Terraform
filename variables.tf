@@ -1,3 +1,6 @@
+### variables.tf
+##  This file defines the variables used in the main.tf and Lustre_Net/main.tf files.
+
 # variable "openstack_ssh_key_pair" {
 #   type      = string
 #   # the name for the resource
@@ -74,4 +77,10 @@ variable "external_network_name" {
   type        = string
   description = "Name of the external network for floating IPs"
   default = "Internal_line"
+}
+
+variable "dns_nameservers" {
+  description = "DNS servers assigned to the subnet"
+  type        = list(string)
+  default     = ["8.8.8.8", "1.1.1.1"]
 }
