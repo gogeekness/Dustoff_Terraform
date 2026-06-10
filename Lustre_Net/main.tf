@@ -13,6 +13,11 @@ resource "openstack_networking_network_v2" "Lustre_Network" {
     "subnet_name : Lustre_subnet"
   ]
 }
+
+data "openstack_networking_network_v2" "External_Net" {
+  name = var.external_network_name
+}
+
 resource "openstack_networking_subnet_v2" "Lustre_subnet" {
   network_id = openstack_networking_network_v2.Lustre_Network.id
   cidr       = var.subnet_cidr
@@ -29,7 +34,7 @@ resource "openstack_networking_subnet_route_v2" "Lustre_route" {
 resource "openstack_networking_router_v2" "Lustre_router" {
   name                = var.router_name
   admin_state_up      = true
-  external_network_id = data.openstack_networking_network_v2.external_network.id
+  external_network_id = data.openstack_networking_network_v2.External_Net.id
 }
 # Attach the subnet to the router
 resource "openstack_networking_router_interface_v2" "Lustre_router_iface" {
