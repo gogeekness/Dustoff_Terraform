@@ -5,7 +5,7 @@
 ##  OpenStack resources for the network, subnet, router, and router interface are defined here.
 
 
-resource "openstack_networking_network_v2" "Lustre_Network" {
+resource "openstack_networking_network_v2" "Lustre_Net" {
   name           = var.network_name
   admin_state_up = true
   tags = [
@@ -20,7 +20,7 @@ data "openstack_networking_network_v2" "External_Net" {
 }
 
 resource "openstack_networking_subnet_v2" "Lustre_subnet" {
-  network_id = openstack_networking_network_v2.Lustre_Network.id
+  network_id = openstack_networking_network_v2.Lustre_Net.id
   cidr       = var.subnet_cidr
   ip_version = 4
   dns_nameservers = var.dns_nameservers
