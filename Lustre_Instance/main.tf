@@ -38,7 +38,7 @@ resource "openstack_compute_instance_v2" "vm" {
     uuid = var.network_id
     # uuid = module.Lustre_Net.network_id   # <-- from module output
   }
-  depends_on = [module.Lustre_Net]  
+  # depends_on = [module.Lustre_Net]  
 }
 
 # ── Floating IP ─── Capture ─────────────────────────────────────────────────────
