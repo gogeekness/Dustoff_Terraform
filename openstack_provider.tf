@@ -28,7 +28,7 @@ terraform {
 provider "openstack" {
   user_name   = "admin"
   tenant_name = "admin"
-  password    = file(expanded("~/.ssh/terraf_passcode"))
+  password    = file(pathexpand("~/.ssh/terraf_passcode"))
   auth_url    = "http://192.168.178.210:5000/v3"
   region      = "RegionOne"
 }
