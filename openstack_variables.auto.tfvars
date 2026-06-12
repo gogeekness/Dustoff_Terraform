@@ -16,7 +16,7 @@ dns_nameservers      = ["8.8.8.8", "1.1.1.1"]
 instance_name         = "lust_net_vm"
 flavor_name           = "m1.small"
 keypair_name          = "lustretest.pub"
-ssh-public-key-path  = "~/.ssh/id_rsa.pub"
+ssh-public-key-path   = "~/.ssh/id_rsa.pub" 
 
 Lserver_list = [
   {

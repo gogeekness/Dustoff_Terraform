@@ -16,9 +16,9 @@ module "lust_net" {
   # vpc_security_group_ids = [module.lust_net.security_group.id]
 }
 
-resource "openstack_compute_keypair_v2" "public-key" {
-  name = "lustre_public-key"
-  public_key = file(var.ssh-public-key-path)
+resource "openstack_compute_keypair_v2" "lustre_key" {
+  name       = "lustre_key"
+  public_key = file("~/.ssh/ed_lustre.pub")
 }
 
 data "openstack_images_image_v2" "ubuntu_24-04"{
@@ -45,7 +45,7 @@ variable "Lserver_list" {
       instance_type = "m1.small"
       ipv4          = "10.0.20.10"
       public_ip     = ""
-      ssh-key       = "~/.ssh/id_rsa.pub"
+      ssh-key       = "lustre_key"
       OS-size       = "20"
       tags = {
         Name    = "lustre_mgt"

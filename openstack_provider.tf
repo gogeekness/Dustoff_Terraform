@@ -29,6 +29,6 @@ provider "openstack" {
   user_name   = "admin"
   tenant_name = "admin"
   password    = file("~/.ssh/terraf_passcode")
-  auth_url    = "http://192.168.178.50:5000/v3"
+  auth_url    = "http://192.168.178.210:5000/v3"
   region      = "RegionOne"
 }
