@@ -16,9 +16,10 @@ module "lust_net" {
   # vpc_security_group_ids = [module.lust_net.security_group.id]
 }
 
+# need to expand path 
 resource "openstack_compute_keypair_v2" "lustre_key" {
   name       = "lustre_key"
-  public_key = file(expanded("~/.ssh/ed_lustre.pub"))
+  public_key = file(pathexpand("~/.ssh/ed_lustre.pub"))
 }
 
 data "openstack_images_image_v2" "ubuntu_24-04"{
