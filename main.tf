@@ -8,10 +8,6 @@
 module "lust_net" {
   source = "./Lustre_Net"
 
-  providers = {
-    openstack = openstack
-  }
-
   network_name          = var.network_name
   subnet_cidr           = var.subnet_cidr
   router_name           = var.router_name
@@ -90,10 +86,6 @@ locals {
 module "lustre_instance" {
   for_each          = { for Lserver in var.Lserver_list : Lserver.host_name => Lserver }
   source            = "./Lustre_Instance"
-
-  providers = {
-    openstack = openstack
-  }
 
   instance_name     = each.value.host_name
   instance_type     = each.value.instance_type
