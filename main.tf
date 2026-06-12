@@ -18,7 +18,7 @@ module "lust_net" {
 
 resource "openstack_compute_keypair_v2" "lustre_key" {
   name       = "lustre_key"
-  public_key = file("~/.ssh/ed_lustre.pub")
+  public_key = file(expanded("~/.ssh/ed_lustre.pub"))
 }
 
 data "openstack_images_image_v2" "ubuntu_24-04"{
