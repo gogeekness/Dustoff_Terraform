@@ -8,15 +8,15 @@
 module "lust_net" {
   source = "./Lustre_Net"
 
-  # external_network_name = var.external_network_name
+  providers = {
+    openstack = openstack
+  }
+
   network_name          = var.network_name
   subnet_cidr           = var.subnet_cidr
   router_name           = var.router_name
   external_network_name = var.external_network_name
   dns_nameservers       = var.dns_nameservers
-   
-  # subnet_id             = var.subnet_id
-  # vpc_security_group_ids = [module.lust_net.security_group.id]
 }
 
 # need to expand path 
@@ -90,6 +90,10 @@ locals {
 module "lustre_instance" {
   for_each          = { for Lserver in var.Lserver_list : Lserver.host_name => Lserver }
   source            = "./Lustre_Instance"
+
+  providers = {
+    openstack = openstack
+  }
 
   instance_name     = each.value.host_name
   instance_type     = each.value.instance_type
