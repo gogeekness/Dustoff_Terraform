@@ -90,7 +90,7 @@ module "lustre_instance" {
   instance_name     = each.value.host_name
   instance_type     = each.value.instance_type
   network_id        = module.lust_net.network_id
-  openstack_key_pub = each.value.ssh-key
+  openstack_key_pub = openstack_compute_keypair_v2.lustre_key.name
   OS-size           = each.value.OS-size
 
   depends_on = [module.lust_net]
