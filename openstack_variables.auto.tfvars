@@ -22,7 +22,7 @@ ssh-public-key-path   = "~/.ssh/id_rsa.pub"
 Lserver_list = [
   {
     host_name     = "lustre_mgt"
-    instance_type = "m1.small"
+    instance_type = "m1.large"
     ipv4          = "10.0.20.10"
     public_ip     = ""
     ssh-key       = "~/.ssh/id_rsa.pub"
@@ -34,8 +34,6 @@ Lserver_list = [
     }
   }
 ]
-
-
 
 // region            = "eu-central-1"
 // availability_zone = "eu-central-1a"
