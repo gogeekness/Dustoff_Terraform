@@ -14,7 +14,7 @@ dns_nameservers      = ["8.8.8.8", "1.1.1.1"]
 
 # Instance deffinitions
 instance_name         = "lust_net_vm"
-flavor_name           = "m1.small"
+flavor_name           = "m1.large"
 keypair_name          = "lustretest.pub"
 ssh-public-key-path   = "~/.ssh/id_rsa.pub" 
 
