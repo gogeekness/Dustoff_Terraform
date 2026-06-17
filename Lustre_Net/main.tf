@@ -15,7 +15,7 @@ resource "openstack_networking_network_v2" "Lustre_Net" {
 }
 
 # fetch the external network by name to get its ID for router uplink
-data "openstack_networking_network_v2" "External_Net" {
+data "openstack_networking_network_v2" "Internal_Net" {
   name = var.external_network_name
 }
 
@@ -35,7 +35,7 @@ resource "openstack_networking_subnet_route_v2" "Lustre_route" {
 resource "openstack_networking_router_v2" "Lustre_router" {
   name                = var.router_name
   admin_state_up      = true
-  external_network_id = data.openstack_networking_network_v2.External_Net.id
+  external_network_id = data.openstack_networking_network_v2.Internal_Net.id
 }
 # Attach the subnet to the router
 resource "openstack_networking_router_interface_v2" "Lustre_router_iface" {
