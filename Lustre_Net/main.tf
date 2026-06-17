@@ -25,6 +25,11 @@ resource "openstack_networking_subnet_v2" "Lustre_subnet" {
   ip_version = 4
   dns_nameservers = var.dns_nameservers
 }
+
+resource "openstack_networking_floatingip_v2" "lustre_fip" {
+  pool = var.external_network_name   # "Maintenence"
+}
+
 resource "openstack_networking_subnet_route_v2" "Lustre_route" {
   subnet_id       = openstack_networking_subnet_v2.Lustre_subnet.id
   destination_cidr = "10.0.10.0/24"
