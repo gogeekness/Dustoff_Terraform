@@ -24,7 +24,7 @@ resource "openstack_compute_instance_v2" "vm" {
   name            = var.instance_name
   flavor_name     = var.instance_type
   key_pair        = var.openstack_key_pub
-  security_groups = [] # Not yet defined 
+  security_groups = ["default"]
 
   block_device {
     uuid                  = openstack_blockstorage_volume_v3.root.id
