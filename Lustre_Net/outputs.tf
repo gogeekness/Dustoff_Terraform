@@ -14,6 +14,10 @@ output "subnet_id" {
 output "router_interface_id" {
   description = "ID of the created router"
   value       = openstack_networking_router_v2.Lustre_router.id
-  
+}
+
+output "floatingip_address" {
+  description = "Floating IP address for bastion access"
+  value       = openstack_networking_floatingip_v2.lustre_fip.address
 }
 
