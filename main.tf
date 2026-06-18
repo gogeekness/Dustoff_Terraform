@@ -93,9 +93,20 @@ module "lustre_instance" {
   depends_on = [module.lust_net]
 }
 
+resource "openstack_compute_floatingip_associate_v2" "lustre_fip_assoc" {
+  floating_ip = module.lust_net.floatingip_address
+  instance_id = module.lustre_instance["lustre_mgt"].instance_id
+  depends_on  = [module.lust_net, module.lustre_instance]
+}
+
 output "instance_ids" {
   description = "IDs of the created instances"
   value       = { for name, inst in module.lustre_instance : name => inst.instance_id }
+}
+
+output "lustre_mgt_floating_ip" {
+  description = "Floating IP to reach lustre_mgt from bastion"
+  value       = module.lust_net.floatingip_address
 }
 
 # module "Lustre_Instance" {
