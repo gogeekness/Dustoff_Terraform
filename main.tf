@@ -93,10 +93,16 @@ module "lustre_instance" {
   depends_on = [module.lust_net]
 }
 
-resource "openstack_compute_floatingip_associate_v2" "lustre_fip_assoc" {
+data "openstack_networking_port_v2" "lustre_mgt_port" {
+  network_id = module.lust_net.network_id
+  device_id  = module.lustre_instance["lustre_mgt"].instance_id
+  depends_on = [module.lustre_instance]
+}
+
+resource "openstack_networking_floatingip_associate_v2" "lustre_fip_assoc" {
   floating_ip = module.lust_net.floatingip_address
-  instance_id = module.lustre_instance["lustre_mgt"].instance_id
-  depends_on  = [module.lust_net, module.lustre_instance]
+  port_id     = data.openstack_networking_port_v2.lustre_mgt_port.id
+  depends_on  = [module.lust_net]
 }
 
 output "instance_ids" {
