@@ -14,8 +14,8 @@ resource "openstack_networking_network_v2" "Lustre_Net" {
   ]
 }
 
-# fetch the external network by name to get its ID for router uplink
-data "openstack_networking_network_v2" "Internal_Net" {
+# fetch the external network by name to get its ID for router uplink External ==> Maintenence network
+data "openstack_networking_network_v2" "External_Net" {
   name = var.external_network_name
 }
 
@@ -30,23 +30,24 @@ resource "openstack_networking_floatingip_v2" "lustre_fip" {
   pool = var.external_network_name   # "Maintenence"
 }
 
-resource "openstack_networking_subnet_route_v2" "Lustre_route" {
-  subnet_id       = openstack_networking_subnet_v2.Lustre_subnet.id
-  destination_cidr = "10.0.10.0/24"
-  next_hop        = "10.0.10.1"
+# resource "openstack_networking_subnet_route_v2" "Lustre_route" {
+#   subnet_id       = openstack_networking_subnet_v2.Lustre_subnet.id
+#   destination_cidr = "10.0.10.0/24"
+#   next_hop        = "10.0.10.1"
+# }
 
-}
 # Router with uplink to external network
 resource "openstack_networking_router_v2" "Lustre_router" {
   name                = var.router_name
   admin_state_up      = true
-  external_network_id = data.openstack_networking_network_v2.Internal_Net.id
+  external_network_id = data.openstack_networking_network_v2.External_Net.id
 }
 # Attach the subnet to the router
 resource "openstack_networking_router_interface_v2" "Lustre_router_iface" {
   router_id = openstack_networking_router_v2.Lustre_router.id
   subnet_id = openstack_networking_subnet_v2.Lustre_subnet.id
 }
+
 
 # resource "aws_vpc" "lustre_vpc" {
 #   cidr_block = "10.0.0.0/16"
