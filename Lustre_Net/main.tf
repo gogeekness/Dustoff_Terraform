@@ -4,7 +4,6 @@
 ##  The networking side of this cluster
 ##  OpenStack resources for the network, subnet, router, and router interface are defined here.
 
-
 resource "openstack_networking_network_v2" "Lustre_Net" {
   name           = var.network_name
   admin_state_up = true
@@ -47,7 +46,6 @@ resource "openstack_networking_router_interface_v2" "Lustre_router_iface" {
   router_id = openstack_networking_router_v2.Lustre_router.id
   subnet_id = openstack_networking_subnet_v2.Lustre_subnet.id
 }
-
 
 # resource "aws_vpc" "lustre_vpc" {
 #   cidr_block = "10.0.0.0/16"
