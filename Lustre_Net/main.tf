@@ -35,11 +35,12 @@ resource "openstack_networking_floatingip_v2" "lustre_fip" {
 #   next_hop        = "10.0.10.1"
 # }
 
-# Router with uplink to external network
+# Router with uplink to external network — enable_snat allows Lustre VMs to reach internet
 resource "openstack_networking_router_v2" "Lustre_router" {
   name                = var.router_name
   admin_state_up      = true
   external_network_id = data.openstack_networking_network_v2.External_Net.id
+  enable_snat         = true
 }
 # Attach the subnet to the router
 resource "openstack_networking_router_interface_v2" "Lustre_router_iface" {
