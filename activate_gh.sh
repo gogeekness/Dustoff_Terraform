@@ -1,5 +1,9 @@
 #!/bin/bash -x
 
+### A more involved version of ssh-activate.sh
+### It does the same but more debugging texts 
+
+
 #set -euo pipefail
 
 ssh_agent=$(ps -aux | grep "ssh-agent \-D" | wc -l)
