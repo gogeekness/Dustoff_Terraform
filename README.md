@@ -1,158 +1,33 @@
-# Terraform_Lustre and OpenStack
-This is a repo to create a Lustre FS cluster with Terraform and OpenStack.
-It is currently a test to create a network and vm for a test with Kubernetes.
-I wanted to work out how to transfer my Terraform code from AWS to OpenStack.
+# bootstrap
 
-**OpenStack is an open source cloud environment.   Form my use, I use Kolla OpenStack**
-An open source version of AWS, or Azure  -- create networks, routing, security groups, and vms.
-Add Ansible and Terraform and one can create and destroy most IT evnronments with ease.
-However, there are complications... 
+Stands up Bastion. Run from the **host**, not from Bastion — this is the one
+branch that has to run somewhere else, since Bastion doesn't exist yet to
+run anything on its own. One-time, rare re-runs only.
 
-### Not as easy as changing the provider tag AWS --> Openstack
-The change was not as simple as changing the provider.
+## What this creates
 
-```
-provider "aws" {
-  region     = var.region
-  access_key = var.Access_Key_ID
-  secret_key = var.Sercret_Access_Key
-}
-```
-_to_  
-```
-provider "openstack" {
-  user_name   = "admin"
-  tenant_name = "admin"
-  domain_name = "Default"   
-  password    = trimspace(file(pathexpand("~/.ssh/terraf_passcode")))
-  auth_url    = "http://192.168.178.210:5000/v3"
-  region      = "RegionOne"
-}
+- Reads `Bastion-net`, `Bastion-router`, and `public1` as data sources
+  (created by hand via the OpenStack CLI, not Terraform-managed here —
+  see `data.tf`)
+- An SSH keypair for **your** access to Bastion (`keypair.tf`)
+- A security group allowing SSH only from the home network (`security_group.tf`)
+- The Bastion instance itself, via `modules/bastion_instance` pulled from
+  the `modules` branch (`bastion.tf`)
+- Bastion's floating IP — the only externally reachable address in the
+  whole environment
+
+## Before you `tofu apply`
+
+Set `bastion_flavor` — it has no default on purpose:
+
+```bash
+tofu apply -var="bastion_flavor=<flavor-name-from-openstack-flavor-list>"
 ```
 
-There was far more envolved as most of the resources headings need to be rewriten.
+or add it to a local (gitignored) `terraform.tfvars`.
 
-**An Example: Subnets**
+## After Bastion is up
 
-```
-resource "aws_subnet" "lustre_subnet" {
-    vpc_id = aws_vpc.lustre_vpc.id
-    cidr_block = var.subnet_cidr
-    availability_zone = var.availability_zone
-    map_public_ip_on_launch = false
-  tags = {
-    Tier = "Private"
-    name = "Lustre_subnet"
-  }
-}
-```
-
-```
-resource "openstack_networking_subnet_v2" "Lustre_subnet"{
-    network_id = openstack_networking_network_v2.Lustre_Net.id
-    cidr       = var.subnet_cidr
-    ip_version = 4
-    dns_nameservers = var.dns_nameservers
-}
-```
-
-Some major diffrences in naming and format between AWS and Openstack.
-**vpc** vs. **network_id** They are equivalent, but for Terraform, incompatible.
-
-So I needed to rip our most of my Terraform code.
-Currently I have the single VM on its' network for use.
-I will be adding the other 2 vms soon and properly setup Lustre.
-
-
-## Tofu 
-### (open source Terraform)
-
-To run Tofu (Open source version Terraform), I use a Bastion MV for ToFu and to hold OpenStack's credenticals
-You will that access to use the Tofu setup here. 
-
-**Requirements** 
-* Linux envrionment, bash is used as a wraper script.
-* docker (docker engine) 27.3.0 or later (optional)
-* docker-compose 1.29.2 or later (optional) 
-* Python 3.10 or later  (My servers have 3.11)
-* ToFu will be installed online
-* Ansible 2.16 or above
-
-There is a secrets file that is used by `variables.tf`.
-
-### secrets.auto.tfvar 
-This file contains keys to access OpenStack API and use SSH
-The Vendor is to be OpenStack
-
-Fill these variable with your specific credentails, by secrets file, password keeper, or vault.
-
-### Ansible (temporarily off-line)
-~~Using Ansible to configure the servers and mounts.~~
-~~The playbook will add the private ssh key to the client server, allowing it to reach the others.~~
-~~When up, the scrip will copy you profile from `$(USER) ./.ssh`~~
-~~Then, log into the client system to then ssh into the 2 servers (MGT & OSS)~~
-
-~~#### Anisble updates~~
-~~Ansible on some Linux is too old for the special plugins.~~
-~~Linux Mint/Ubuntu at the time of writing only has version 2.10~~
-~~Remove the old ansible~~
-~~1. `sudo apt remove ansible`~~
-~~2. `sudo apt --purge ansible`~~
-~~Then update Linux~~
-~~1. `sudo apt update`~~
-~~2. `sudo apt upgrade`~~
-~~Then update the apt source lists~~
-~~1. `sudo apt -y install software-properties-common`~~
-~~2. `sudo apt-add-repository ppa:ansible/ansible`~~
-~~Then install the lastest Ansible. If this install is still the old verion, then restart and try installing again~~
-~~1. `sudo apt install ansible`~~
-
-~~### The base diskimage and snapshot~~
-~~If you entend to use this image and snapshot, be aware that the build in user is `ec-user`.~~
-~~Once you are in the VMs update the active users, the Ansibel code will do that.~~
-~~I included my ZFS install commands so you can create your ZFS installation on Alma8~~
-~~The snapshot should have python3 set to verion 3.11~~
-~~*  Do it here with the snap shot as updating through the client (Bastion) is more involved.~~
-~~*  Do it here one and then use the snapshot as a template for the other servers.~~
-
-~~### Bash adn command line~~
-~~The scrip will create the container with Tofu, AWS CLI, and Ansible.~~
-~~Run Tofo on AWS then pass the public IP to Ansible to configure.~~
-~~Then the script will run the contrainer creating the Lustre cluster by Tofu.~~
-~~* The `Lustre.sh` is more of draft in I have not tested it.~~
-~~*  I have used parts of it when I started to create my inital vm, then created a snapshot of the OS disk.~~
-~~*  However, the commands as a sequence works.  This is who I solved the installation of ZFS on Alma 8 (manualy).~~
-
-~~### Cluster layout, lustre file system name is: Lust~~
-~~* lustre_mgt    (IB: 10.0.0.?) for the MGT, MDS and MDT.~~
-~~* lustre_oss    (IB: 10.0.0.?) for the OSS and OST.~~
-~~* lustre_client (IB: 10.0.0.?) for the client.~~
-
-~~All of the servers have 30 GB data drives (scratch pad) for extra working data.~~
-~~The OSS drive has a extra drive 2 TB drive for ZFS.~~
-
-~~The Client also is a jumpbox or bastion to the other two servers.  I only public IP is to the Client.~~
-~~From it, Ansible can tunnel to the other two machines.  That IP is created by AWS, then the Ansible Invtory plugin reads it.~~
-
-~~## The goal~~
-~~To have a working Lustre test Cluster with a couple of commands.~~
-~~Then direct access to create and use a simple Lustre FS and use the commands.~~
-~~This is not ment to be a usable cluster as the OSS and the MD servers are only link by 1G network.  It is very slow compared to a proper cluster.~~
-
-~~## The Path~~
-~~While so far I have not reached my goal the path has been rewarding.~~
-~~* Learn Terraform.  I can depoy various infrasture layout by TF~~
-~~* More time with Ansible.  Learn better ways of implementing Ansible in AWS and understand some of Anislble's limitations.~~
-
-~~# Runing commands on Tofu and Ansible~~
-~~### To run commands in Tofu~~
-
-
-~~### Runing Ansible~~
-~~- Use a variation of `ansible-playbook -vv -i ../Terraform_Lustre/inventory/Lustre_aws_ec2.yml --ask-vault-password ../Terraform_Lustre/playbook.yml`~~
-~~- - Ansible and Playbook~~
-~~- - vv for verbosity (v - vvvv)~~
-~~- - The inventory, for me using "...aws_ec2.yml"~~
-~~- - - This is a special Invnetory plugin for Ansible that pulls AWS data of your infrastructure.~~
-~~- - - https://docs.ansible.com/ansible/latest/collections/amazon/aws/aws_ec2_inventory.html~~
-~~- - A password for a local ansible vault (optional)~~
+Everything else — `lustre`, `kubernetes`, `slurm` — gets applied **from
+Bastion**, not from here. See the `modules` branch README for the full
+deployment order.

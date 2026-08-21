@@ -1,5 +1,6 @@
 secrets*
 *.hcl
+terraform.tfvars
 .terraform/
 terraform.tfstate*
 .terraform*
