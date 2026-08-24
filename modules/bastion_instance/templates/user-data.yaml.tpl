@@ -24,6 +24,17 @@ packages:
   - vim
   - htop
   - jq
+  - lsof
+  - net-tools
+  - nmap
+  - iftop
+  - strace
+  - restic
+  - mtr
+  - fio
+  - sysstat
+  - tmux
+  - tuned
   - unattended-upgrades
   - fail2ban
   - chrony                            # NTP sync
