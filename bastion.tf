@@ -1,7 +1,7 @@
 ### bastion.tf
 
 module "bastion" {
-  source = "git::git@github.com-terraform:gogeekness/Dustoff_Terraform.git//modules/bastion_instance?ref=modules"
+  source = "./modules/bastion_instance"
 
   instance_type          = var.bastion_flavor
   network_id             = data.openstack_networking_network_v2.bastion_net.id

@@ -11,8 +11,12 @@ run anything on its own. One-time, rare re-runs only.
   see `data.tf`)
 - An SSH keypair for **your** access to Bastion (`keypair.tf`)
 - A security group allowing SSH only from the home network (`security_group.tf`)
-- The Bastion instance itself, via `modules/bastion_instance` pulled from
-  the `modules` branch (`bastion.tf`)
+- The Bastion instance itself, via a local copy of `modules/bastion_instance`
+  (`bastion.tf`) — copied in from the `modules` branch rather than fetched
+  via a git-ref module source, so this branch is fully self-contained: no
+  second branch, no `.terraform/modules/` cache, involved in reading it.
+  If `modules/bastion_instance` changes upstream, that change has to be
+  copied in by hand; nothing here updates automatically.
 - Bastion's floating IP — the only externally reachable address in the
   whole environment
 
