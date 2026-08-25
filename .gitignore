@@ -6,5 +6,10 @@ terraform.tfstate*
 .terraform*
 *plan
 *.log
-*key*
-*Key*
+id_rsa*
+id_ed25519*
+id_ecdsa*
+*.pem
+*.ppk
+*_key
+*_key.*
