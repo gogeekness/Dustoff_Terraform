@@ -23,7 +23,7 @@ variable "bastion_flavor" {
 variable "operator_ssh_public_key_path" {
   description = "Path to the public key used for YOUR access to Bastion (not the key Bastion later uses to reach other VMs)"
   type        = string
-  default     = "~/.ssh/id_rsa.pub"
+  default     = "~/.ssh/id_ecdsa_bastion.pub"
 }
 
 variable "home_network_cidr" {
