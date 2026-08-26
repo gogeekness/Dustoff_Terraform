@@ -17,9 +17,6 @@ resource "openstack_networking_secgroup_rule_v2" "ssh_from_home" {
   security_group_id = openstack_networking_secgroup_v2.bastion.id
 }
 
-resource "openstack_networking_secgroup_rule_v2" "egress_all" {
-  direction         = "egress"
-  ethertype         = "IPv4"
-  remote_ip_prefix  = "0.0.0.0/0"
-  security_group_id = openstack_networking_secgroup_v2.bastion.id
-}
+# No explicit egress rule needed: Neutron auto-creates an allow-all-egress
+# (IPv4 + IPv6) rule the moment the security group itself is created.
+# Declaring our own duplicate here causes a 409 SecurityGroupRuleExists.
