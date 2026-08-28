@@ -1,8 +1,5 @@
 ### modules/bastion_instance/variables.tf
-## The Bastion VM itself — used only by the `bootstrap` branch (run from the
-## host, before Bastion exists to run anything itself). Boots from the image
-## directly (no Cinder volume) and gets the one floating IP in the whole
-## environment.
+## the only varibles for the bastion instance
 
 variable "instance_name" {
   type    = string

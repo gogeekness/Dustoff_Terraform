@@ -1,4 +1,9 @@
 ### modules/bastion_instance/main.tf
+## To create the bastion instance and the supporting network.
+## The The plan is only to be run on the host. 
+## Everything else will be seaperate and will be ran on the bastion. 
+
+
 
 data "openstack_images_image_v2" "this" {
   name        = var.image_name
