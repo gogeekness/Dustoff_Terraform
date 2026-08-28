@@ -5,16 +5,17 @@
 ### Adds the ssh-keys at the end
 ### run a source 'source ssh-activate.sh'
 
-agent_ok() { ssh-add -l > /dev/null 2>&1 || [ $? -eq 1 ]; }
-if ! agent_ok; then
-    if [ -e ~/.ssh/agent.info ]; then
-       eval $(< ~/.ssh/agent.info)
-    fi
+ssh_agent=$(ps -aux | grep "ssh-agent" | wc -l)
+if [[ $ssh_agent -gt 0 ]]; then 
+	PDD=$(ps -aux | grep $USER.*ssh-agent | cut -c 11-17) 
+	echo "extra agents: $PDD, need to remove."
+	echo "[ssh] Starting new ssh-agent..."
+	eval $(ssh-agent -s | tee ~/.ssh/agent.info)
+	trap "ssh-agent -k" EXIT
+	echo "[ssh] Reusing existing ssh-agent (PID ${SSH_AGENT_PID:-unknown})"
+	eval `ssh-agent -s`
 fi
-if ! agent_ok; then
-    eval $(ssh-agent | tee ~/.ssh/agent.info)
-fi
-cat ~/.ssh/agent.info
+echo "Adding keys to agent $PDD"
 
 ssh-add ~/.ssh/ed_lustre
 ssh-add ~/.ssh/gh_tf
